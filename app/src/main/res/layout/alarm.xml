@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--알림창 전체-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
+
+        <!--알림창 위쪽 회색 칸-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="#848484"
+            android:orientation="horizontal"
+            tools:ignore="MissingConstraints">
+
+            <!-- 회색 칸 안의 약 이름-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_marginEnd="10dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:text="약 이름1"
+                    android:textSize="12sp">
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_marginEnd="10dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:text="약 이름1"
+                    android:textSize="12sp">
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_marginEnd="10dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:text="약 이름1"
+                    android:textSize="12sp">
+                </TextView>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!--알림창 아래 흰색 부분-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:padding="10dp"
+            android:orientation="horizontal">
+
+            <!--오전/오후-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:text="오전"
+                android:textSize="25sp">
+            </TextView>
+
+            <!--시간-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:text="9:00"
+                android:textSize="35sp">
+            </TextView>
+
+            <!--요일(월)-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="월"
+                android:layout_marginEnd="5dp"
+                android:textSize="16sp">
+            </TextView>
+
+            <!--요일(화)-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="화"
+                android:layout_marginEnd="5dp"
+                android:textSize="16sp">
+            </TextView>
+
+            <!--요일(수)-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="수"
+                android:layout_marginEnd="5dp"
+                android:textSize="16sp">
+            </TextView>
+
+            <!--요일(목)-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="목"
+                android:layout_marginEnd="5dp"
+                android:textSize="16sp">
+            </TextView>
+
+            <!--요일(금)-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="금"
+                android:layout_marginEnd="5dp"
+                android:textSize="16sp">
+            </TextView>
+
+            <!--요일(토)-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="토"
+                android:layout_marginEnd="5dp"
+                android:textSize="16sp">
+            </TextView>
+
+            <!--요일(일)-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="일"
+                android:layout_marginEnd="5dp"
+                android:textSize="16sp">
+            </TextView>
+
+            <!--스위치-->
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:layout_marginStart="50dp"
+                tools:ignore="UseSwitchCompatOrMaterialXml">
+            </Switch>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--해야할 것-->
+<!--1. 스위치 커스텀-->
+<!--2. id를 어떻게 부여할 것인가-->
+<!--3. 네모 박스 둥글게 만들기-->
+<!--4. 알람 박스 서로 띄우기-->
+<!--5. java로 동작 구현-->

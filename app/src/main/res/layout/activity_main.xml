@@ -82,6 +82,49 @@
                 </HorizontalScrollView>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    tools:ignore="MissingConstraints">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <include
+                            android:id="@+id/alarm1"
+                            layout="@layout/alarm" />
+
+                        <include
+                            android:id="@+id/alarm2"
+                            layout="@layout/alarm" />
+
+                        <include
+                            android:id="@+id/alarm3"
+                            layout="@layout/alarm" />
+
+                        <include
+                            android:id="@+id/alarm4"
+                            layout="@layout/alarm" />
+
+                        <include
+                            android:id="@+id/alarm5"
+                            layout="@layout/alarm" />
+
+                        <include
+                            android:id="@+id/alarm6"
+                            layout="@layout/alarm" />
+                    </LinearLayout>
+                </ScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

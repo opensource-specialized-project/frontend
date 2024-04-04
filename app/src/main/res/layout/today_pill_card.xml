@@ -19,8 +19,7 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_launcher_background"
             android:contentDescription="@string/card_content_description"
-            tools:ignore="ImageContrastCheck"
-        />
+            tools:ignore="ImageContrastCheck" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
