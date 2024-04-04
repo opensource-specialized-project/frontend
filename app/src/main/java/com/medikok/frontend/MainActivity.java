@@ -30,16 +30,16 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        // 버튼 객체 참조
-        Button button = findViewById(R.id.button);
-
-        // 버튼에 클릭 이벤트 리스너 설정
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent();
-            }
-        });
+//        // 버튼 객체 참조
+//        Button button = findViewById(R.id.button);
+//
+//        // 버튼에 클릭 이벤트 리스너 설정
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dispatchTakePictureIntent();
+//            }
+//        });
     }
 
     private void dispatchTakePictureIntent() {
