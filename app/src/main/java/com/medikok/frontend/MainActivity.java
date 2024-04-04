@@ -9,8 +9,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import android.view.View; // 뷰 추가
-import android.widget.Button; // 버튼 추가
 import android.widget.ImageView; // 이미지뷰 추가
 
 import android.content.Intent; // 인텐트 추가
