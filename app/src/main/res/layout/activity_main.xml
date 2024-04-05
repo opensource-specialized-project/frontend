@@ -7,6 +7,24 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginStart="300dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="#ffffff"
+        android:clickable="true"
+        android:contentDescription="알람을 추가하는 버튼"
+        android:hint="액션 버튼"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_add" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
@@ -122,9 +140,12 @@
                         <include
                             android:id="@+id/alarm6"
                             layout="@layout/alarm" />
+
                     </LinearLayout>
                 </ScrollView>
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
