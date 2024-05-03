@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         CardView pillCard = makePillCard(this, imageDrawble, "항암제", "1일 100회", "맛있음");
         CardView pillCard1 = makePillCard(this, imageDrawble1, "영양제", "1일 100회", "맛있음");
         CardView pillCard2 = makePillCard(this, imageDrawble, "발모제", "1일 100회", "맛있음");
-        CardView pillCard3 = makePillCard(this, imageDrawble1, "비타민", "1일 100회", "맛있음");
+        CardView pillCard3 = makePillCard(this, imageDrawble, "비타민", "1일 100회", "맛있음");
         CardView pillCard4 = makePillCard(this, imageDrawble1, "독극물", "1일 100회", "맛있음");
         CardView pillCard5 = makePillCard(this, imageDrawble1, "마약", "1일 100회", "맛있음");
         
