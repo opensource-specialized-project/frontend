@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="108dp"
+            android:layout_height="108dp"
             app:srcCompat="@drawable/ic_launcher_background"
             android:contentDescription="@string/card_content_description"
             tools:ignore="ImageContrastCheck" />
@@ -75,5 +75,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
+
 
 </androidx.cardview.widget.CardView>
