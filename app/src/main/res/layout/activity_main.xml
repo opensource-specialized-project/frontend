@@ -76,25 +76,26 @@
                     tools:ignore="SpeakableTextPresentCheck">
 
                     <LinearLayout
+                        android:id="@+id/layout1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <include
-                            android:id="@+id/card_view1"
-                            layout="@layout/today_pill_card" />
+<!--                        <include-->
+<!--                            android:id="@+id/card_view1"-->
+<!--                            layout="@layout/today_pill_card" />-->
 
-                        <include
-                            android:id="@+id/card_view2"
-                            layout="@layout/today_pill_card" />
+<!--                        <include-->
+<!--                            android:id="@+id/card_view2"-->
+<!--                            layout="@layout/today_pill_card" />-->
 
-                        <include
-                            android:id="@+id/card_view3"
-                            layout="@layout/today_pill_card" />
+<!--                        <include-->
+<!--                            android:id="@+id/card_view3"-->
+<!--                            layout="@layout/today_pill_card" />-->
 
-                        <include
-                            android:id="@+id/card_view4"
-                            layout="@layout/today_pill_card" />
+<!--                        <include-->
+<!--                            android:id="@+id/card_view4"-->
+<!--                            layout="@layout/today_pill_card" />-->
 
                     </LinearLayout>
                 </HorizontalScrollView>
