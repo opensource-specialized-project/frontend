@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         ));
 
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        
+
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(400, 400);
 
         imageView.setLayoutParams(layoutParams);
@@ -128,11 +128,26 @@ public class MainActivity extends AppCompatActivity {
                 ConstraintLayout.LayoutParams.WRAP_CONTENT,
                 ConstraintLayout.LayoutParams.WRAP_CONTENT
         ));
+        countView.setText(medicineCount);
+        countView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        countView.setTypeface(null, Typeface.BOLD);
+
+        // 약품 효능 TextView 생성
+        TextView effectView = new TextView(context);
+        effectView.setId(View.generateViewId());
+        effectView.setLayoutParams(new ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.WRAP_CONTENT,
+                ConstraintLayout.LayoutParams.WRAP_CONTENT
+        ));
+        effectView.setText(medicineEffect);
+        effectView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        effectView.setTypeface(null, Typeface.BOLD);
 
         // 카드 뷰에 내용 추가
         linearLayout.addView(imageView);
         linearLayout.addView(nameView);
         linearLayout.addView(countView);
+        linearLayout.addView(effectView); // 이 부분을 medicineCount 밑으로 이동하여 수정하였습니다.
         pillCard.addView(linearLayout); // linearLayout을 카드에 추가
 
         return pillCard;
