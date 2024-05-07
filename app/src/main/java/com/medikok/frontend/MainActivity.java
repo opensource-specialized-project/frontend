@@ -6,8 +6,10 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView; // 텍스트뷰 추가
 import android.widget.ImageView; // 이미지뷰 추가
 import android.widget.LinearLayout; // 리이너레이아웃 추가
@@ -25,11 +27,11 @@ import androidx.core.view.WindowInsetsCompat;
 import android.graphics.drawable.Drawable; // Drawable 추가
 import android.content.Context; // Context 추가
 
-
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    // spring boot 서버와 연결하기 위함
+    private ServerConnector serverConnector;
     private ImageView imageView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         LinearLayout dynamicLayout;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Button testButton = ServerConnector.makeButton(this);
 
         dynamicLayout = findViewById(R.id.layout1);
         Drawable imageDrawble = getResources().getDrawable(R.drawable.pill);
@@ -53,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
         CardView pillCard3 = makePillCard(this, imageDrawble, "비타민", "1일 100회", "맛있음");
         CardView pillCard4 = makePillCard(this, imageDrawble1, "독극물", "1일 100회", "맛있음");
         CardView pillCard5 = makePillCard(this, imageDrawble1, "마약", "1일 100회", "맛있음");
-        
+
+        dynamicLayout.addView(testButton);
         dynamicLayout.addView(pillCard);
         dynamicLayout.addView(pillCard1);
         dynamicLayout.addView(pillCard2);
@@ -61,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         dynamicLayout.addView(pillCard4);
         dynamicLayout.addView(pillCard5);
     }
+
 
     private CardView makePillCard(Context context, Drawable imageDrawable, String medicineName, String medicineCount, String medicineEffect)
     {

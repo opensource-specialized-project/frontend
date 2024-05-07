@@ -36,8 +36,10 @@ dependencies {
     implementation libs.constraintlayout
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
     implementation libs.exifinterface
+    implementation libs.firebase.crashlytics.buildtools
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
-    implementation 'com.android.support:design:28.0.0'
+
+    implementation "androidx.cardview:cardview:1.0.0" // cardview 사용
 }
