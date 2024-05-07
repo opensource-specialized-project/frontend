@@ -41,5 +41,7 @@ dependencies {
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
 
+    // DrugInfo model의 json 분할을 위해 사용
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
     implementation "androidx.cardview:cardview:1.0.0" // cardview 사용
 }

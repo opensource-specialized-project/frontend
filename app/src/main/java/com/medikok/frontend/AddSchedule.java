@@ -20,14 +20,14 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import androidx.core.content.FileProvider;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
+import com.medikok.frontend.util.MediaScanner;
 
 
 import java.io.File;
@@ -35,7 +35,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -60,7 +59,7 @@ public class AddSchedule extends AppCompatActivity {
         });
 
         // 사진 저장 후 미디어 스캐닝을 돌려줘야 갤러리에 반영됨.
-        mMediaScanner = com.medikok.frontend.MediaScanner.getInstance(getApplicationContext());
+        mMediaScanner = MediaScanner.getInstance(getApplicationContext());
 
 
         // 권한 체크

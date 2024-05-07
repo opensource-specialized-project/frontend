@@ -1,4 +1,4 @@
-package com.medikok.frontend;
+package com.medikok.frontend.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap; // 비트맵 데이터(이미지 전송 목적) 추가
@@ -9,13 +9,10 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView; // 텍스트뷰 추가
 import android.widget.ImageView; // 이미지뷰 추가
 import android.widget.LinearLayout; // 리이너레이아웃 추가
 import androidx.cardview.widget.CardView; // 카드뷰 추가
-
-import android.content.res.Resources; // dimens.xml의 value들을 참고하기위함
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +24,11 @@ import androidx.core.view.WindowInsetsCompat;
 import android.graphics.drawable.Drawable; // Drawable 추가
 import android.content.Context; // Context 추가
 
+import com.medikok.frontend.R;
+import com.medikok.frontend.model.DrugInfo;
+import com.medikok.frontend.util.ServerConnector;
+
+import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     // spring boot 서버와 연결하기 위함
@@ -39,12 +41,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        /// 서버와 연결
+        ServerConnector.connectToServer(new ServerConnector.ServerResponseListener() {
+            @Override
+            public void onSuccess(List<DrugInfo> responseData) {
+                // 서버 응답 데이터 처리
+                for (DrugInfo drugInfo : responseData) {
+                    Log.d("MainActivity", "Item Name: " + drugInfo.getItemName());
+                    Log.d("MainActivity", "Effects: " + drugInfo.getEffects());
+                    Log.d("MainActivity", "Use Method: " + drugInfo.getUseMethod());
+                }
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                // 오류 처리
+                Log.d("MainActivity", errorMessage);
+            }
+        });
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        Button testButton = ServerConnector.makeButton(this);
 
         dynamicLayout = findViewById(R.id.layout1);
         Drawable imageDrawble = getResources().getDrawable(R.drawable.pill);
@@ -57,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
         CardView pillCard4 = makePillCard(this, imageDrawble1, "독극물", "1일 100회", "맛있음");
         CardView pillCard5 = makePillCard(this, imageDrawble1, "마약", "1일 100회", "맛있음");
 
-        dynamicLayout.addView(testButton);
         dynamicLayout.addView(pillCard);
         dynamicLayout.addView(pillCard1);
         dynamicLayout.addView(pillCard2);

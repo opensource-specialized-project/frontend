@@ -1,4 +1,4 @@
-package com.medikok.frontend;
+package com.medikok.frontend.util;
 
 import android.content.Context;
 import android.media.MediaScannerConnection;
