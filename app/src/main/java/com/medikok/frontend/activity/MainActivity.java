@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 ConstraintLayout.LayoutParams.WRAP_CONTENT
         );
 
-        nameViewParams.width = 400; // 폭을 400픽셀로 설정
+        nameViewParams.width = 300; // 폭을 400픽셀로 설정
         nameView.setLayoutParams(nameViewParams);
         nameView.setText(medicineName);
         nameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
