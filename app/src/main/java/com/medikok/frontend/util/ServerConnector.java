@@ -63,6 +63,17 @@ public class ServerConnector {
                 super.onPostExecute(responseData);
                 if (!responseData.isEmpty()) {
                     listener.onSuccess(responseData);
+                    // 추가된 부분: 로그에 DrugInfo 객체 정보 출력
+                    for (DrugInfo drugInfo : responseData) {
+                        Log.d("ServerConnector", "Item Name: " + drugInfo.getItemName());
+                        Log.d("ServerConnector", "Effects: " + drugInfo.getEfcyQesitm());
+                        Log.d("ServerConnector", "Usage Method: " + drugInfo.getUseMethodQesitm());
+                        Log.d("ServerConnector", "Precautions Before Use: " + drugInfo.getAtpnWarnQesitm());
+                        Log.d("ServerConnector", "Precautions: " + drugInfo.getAtpnQesitm());
+                        Log.d("ServerConnector", "Interactions: " + drugInfo.getIntrcQesitm());
+                        Log.d("ServerConnector", "Storage Precautions: " + drugInfo.getDepositMethodQesitm());
+                        Log.d("ServerConnector", "Image URL: " + drugInfo.getItemImage());
+                    }
                 }
             }
         }.execute();
@@ -76,14 +87,19 @@ public class ServerConnector {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 DrugInfo drugInfo = new DrugInfo();
                 drugInfo.setItemName(jsonObject.getString("itemName"));
-                // 이하 원하는 필드에 대해 파싱하여 설정
+                // 나머지 필드들에 대해서도 파싱하여 설정
                 JSONArray effectsArray = jsonObject.getJSONArray("efcyQesitm");
                 List<String> effects = new ArrayList<>();
                 for (int j = 0; j < effectsArray.length(); j++) {
                     effects.add(effectsArray.getString(j));
                 }
-                drugInfo.setEffects(effects);
-                drugInfo.setUseMethod(jsonObject.getString("useMethodQesitm"));
+                drugInfo.setEfcyQesitm(effects);
+                drugInfo.setUseMethodQesitm(jsonObject.getString("useMethodQesitm"));
+                drugInfo.setAtpnWarnQesitm(jsonObject.optString("atpnWarnQesitm", ""));
+                drugInfo.setAtpnQesitm(jsonObject.optString("atpnQesitm", ""));
+                drugInfo.setIntrcQesitm(jsonObject.optString("intrcQesitm", ""));
+                drugInfo.setDepositMethodQesitm(jsonObject.optString("depositMethodQesitm", ""));
+                drugInfo.setItemImage(jsonObject.optString("itemImage", ""));
                 drugInfoList.add(drugInfo);
             }
         } catch (JSONException e) {

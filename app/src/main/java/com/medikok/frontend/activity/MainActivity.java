@@ -48,8 +48,14 @@ public class MainActivity extends AppCompatActivity {
                 // 서버 응답 데이터 처리
                 for (DrugInfo drugInfo : responseData) {
                     Log.d("MainActivity", "Item Name: " + drugInfo.getItemName());
-                    Log.d("MainActivity", "Effects: " + drugInfo.getEffects());
-                    Log.d("MainActivity", "Use Method: " + drugInfo.getUseMethod());
+                    Log.d("MainActivity", "Effects: " + drugInfo.getEfcyQesitm());
+                    Log.d("MainActivity", "Usage Method: " + drugInfo.getUseMethodQesitm());
+                    Log.d("MainActivity", "Precautions Before Use: " + drugInfo.getAtpnWarnQesitm());
+                    Log.d("MainActivity", "Precautions: " + drugInfo.getAtpnQesitm());
+                    Log.d("MainActivity", "Interactions: " + drugInfo.getIntrcQesitm());
+                    Log.d("MainActivity", "Storage Precautions: " + drugInfo.getDepositMethodQesitm());
+                    Log.d("MainActivity", "Image URL: " + drugInfo.getItemImage());
+                    Log.d("MainActivity", "\n");
                 }
             }
 
