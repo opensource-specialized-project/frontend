@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.cardview.widget.CardView; // 카드뷰 추가
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -46,10 +48,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(List<DrugInfo> responseData) {
                 // 서버 응답 데이터 처리
+                LinearLayout dynamicLayout = findViewById(R.id.layout1);
                 for (DrugInfo drugInfo : responseData) {
                     Log.d("MainActivity", "Item Name: " + drugInfo.getItemName());
-                    Log.d("MainActivity", "Effects: " + drugInfo.getEffects());
-                    Log.d("MainActivity", "Use Method: " + drugInfo.getUseMethod());
+                    Log.d("MainActivity", "Effects: " + drugInfo.getEfcyQesitm());
+                    Log.d("MainActivity", "Use Method: " + drugInfo.getUseMethodQesitm());
+
+                    CardView pillCard = makePillCard(MainActivity.this, null, drugInfo.getItemName(), drugInfo.getUseMethodQesitm(), drugInfo.getEfcyQesitm());
+                    dynamicLayout.addView(pillCard);
                 }
             }
 
@@ -64,24 +70,6 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        dynamicLayout = findViewById(R.id.layout1);
-        Drawable imageDrawble = getResources().getDrawable(R.drawable.pill);
-        Drawable imageDrawble1 = getResources().getDrawable(R.drawable.pill1);
-
-        CardView pillCard = makePillCard(this, imageDrawble, "항암제", "1일 100회", "맛있음");
-        CardView pillCard1 = makePillCard(this, imageDrawble1, "영양제", "1일 100회", "맛있음");
-        CardView pillCard2 = makePillCard(this, imageDrawble, "발모제", "1일 100회", "맛있음");
-        CardView pillCard3 = makePillCard(this, imageDrawble, "비타민", "1일 100회", "맛있음");
-        CardView pillCard4 = makePillCard(this, imageDrawble1, "독극물", "1일 100회", "맛있음");
-        CardView pillCard5 = makePillCard(this, imageDrawble1, "마약", "1일 100회", "맛있음");
-
-        dynamicLayout.addView(pillCard);
-        dynamicLayout.addView(pillCard1);
-        dynamicLayout.addView(pillCard2);
-        dynamicLayout.addView(pillCard3);
-        dynamicLayout.addView(pillCard4);
-        dynamicLayout.addView(pillCard5);
     }
 
 
@@ -96,8 +84,6 @@ public class MainActivity extends AppCompatActivity {
         );
         // 좌우 마진 설정
         pillCardParams.setMargins(1, 50, 100, 50); // 여기서 16은 원하는 간격 값입니다.
-
-        pillCard.setLayoutParams(pillCardParams);
 
         pillCard.setLayoutParams(pillCardParams);
 
@@ -136,34 +122,48 @@ public class MainActivity extends AppCompatActivity {
         // 약품명 TextView 생성
         TextView nameView = new TextView(context);
         nameView.setId(View.generateViewId());
-        nameView.setLayoutParams(new ConstraintLayout.LayoutParams(
+        // ConstraintLayout.LayoutParams로 변경
+        ConstraintLayout.LayoutParams nameViewParams = new ConstraintLayout.LayoutParams(
                 ConstraintLayout.LayoutParams.WRAP_CONTENT,
                 ConstraintLayout.LayoutParams.WRAP_CONTENT
-        ));
+        );
+
+        nameViewParams.width = 300; // 폭을 400픽셀로 설정
+        nameView.setLayoutParams(nameViewParams);
         nameView.setText(medicineName);
         nameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        nameView.setMaxLines(1); // 한 줄만 표기되도록
+        nameView.setEllipsize(TextUtils.TruncateAt.END); // 한 줄 넘어가면 ...으로 생략
         nameView.setTypeface(null, Typeface.BOLD);
 
         // 약품 복용 횟수 TextView 생성
         TextView countView = new TextView(context);
         countView.setId(View.generateViewId());
-        countView.setLayoutParams(new ConstraintLayout.LayoutParams(
+        ConstraintLayout.LayoutParams countViewParams = new ConstraintLayout.LayoutParams(
                 ConstraintLayout.LayoutParams.WRAP_CONTENT,
                 ConstraintLayout.LayoutParams.WRAP_CONTENT
-        ));
+        );
+        countViewParams.width = 300; // 폭을 300픽셀로 설정
+        countView.setLayoutParams(countViewParams);
         countView.setText(medicineCount);
-        countView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        countView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
+        countView.setMaxLines(1);
+        countView.setEllipsize(TextUtils.TruncateAt.END);
         countView.setTypeface(null, Typeface.BOLD);
 
         // 약품 효능 TextView 생성
         TextView effectView = new TextView(context);
         effectView.setId(View.generateViewId());
-        effectView.setLayoutParams(new ConstraintLayout.LayoutParams(
+        ConstraintLayout.LayoutParams effectViewParams = new ConstraintLayout.LayoutParams(
                 ConstraintLayout.LayoutParams.WRAP_CONTENT,
                 ConstraintLayout.LayoutParams.WRAP_CONTENT
-        ));
+        );
+        effectViewParams.width = 170; // 폭을 200픽셀로 설정
+        effectView.setLayoutParams(effectViewParams);
         effectView.setText(medicineEffect);
-        effectView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        effectView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
+        effectView.setMaxLines(1);
+        effectView.setEllipsize(TextUtils.TruncateAt.END);
         effectView.setTypeface(null, Typeface.BOLD);
 
         // 카드 뷰에 내용 추가
