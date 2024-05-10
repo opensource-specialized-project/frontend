@@ -19,6 +19,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -54,7 +55,13 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("MainActivity", "Effects: " + drugInfo.getEfcyQesitm());
                     Log.d("MainActivity", "Use Method: " + drugInfo.getUseMethodQesitm());
 
-                    CardView pillCard = makePillCard(MainActivity.this, null, drugInfo.getItemName(), drugInfo.getUseMethodQesitm(), drugInfo.getEfcyQesitm());
+                    String name = drugInfo.getItemName();
+                    String effect = drugInfo.getEfcyQesitm();
+                    String method = drugInfo.getUseMethodQesitm();
+
+                    Drawable image = ContextCompat.getDrawable(MainActivity.this, R.drawable.pill);
+
+                    CardView pillCard = makePillCard(MainActivity.this, image, name, method, effect);
                     dynamicLayout.addView(pillCard);
                 }
             }
@@ -84,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
         );
         // 좌우 마진 설정
         pillCardParams.setMargins(1, 50, 100, 50); // 여기서 16은 원하는 간격 값입니다.
-
         pillCard.setLayoutParams(pillCardParams);
 
         // 카드 모서리 변경 (관련 메소드가 존재하지 않아 수정 필요)
@@ -98,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT
         ));
+        linearLayout.setPadding(15,15,15,15); // 내부 패딩 설정
 
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -158,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 ConstraintLayout.LayoutParams.WRAP_CONTENT,
                 ConstraintLayout.LayoutParams.WRAP_CONTENT
         );
-        effectViewParams.width = 170; // 폭을 200픽셀로 설정
+        effectViewParams.width = 300; // 폭을 200픽셀로 설정
         effectView.setLayoutParams(effectViewParams);
         effectView.setText(medicineEffect);
         effectView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
