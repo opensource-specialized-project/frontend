@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ListView 항목 레이아웃 예시, 별도의 XML 파일로 분리 권장 -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <!-- 이미지 -->
+    <ImageView
+        android:id="@+id/image_pill"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/pill"
+        android:padding="10dp" />
+
+    <!-- 약 이름과 제조사 정보 -->
+    <LinearLayout
+        android:layout_toRightOf="@id/image_pill"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:paddingLeft="10dp">
+
+        <TextView
+            android:id="@+id/text_pill_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="약 이름 + 용량(mg)"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/text_pill_manufacturer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="제조사"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+</RelativeLayout>
