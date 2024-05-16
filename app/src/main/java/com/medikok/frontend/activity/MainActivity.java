@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                     String effect = drugInfo.getEfcyQesitm();
                     String method = drugInfo.getUseMethodQesitm();
 
-                    Drawable image = ContextCompat.getDrawable(MainActivity.this, R.drawable.pill);
+                    Drawable image = ContextCompat.getDrawable(MainActivity.this, R.drawable.none);
 
                     CardView pillCard = makePillCard(MainActivity.this, image, name, method, effect);
                     dynamicLayout.addView(pillCard);
@@ -179,6 +179,19 @@ public class MainActivity extends AppCompatActivity {
         linearLayout.addView(countView);
         linearLayout.addView(effectView); // 이 부분을 medicineCount 밑으로 이동하여 수정하였습니다.
         pillCard.addView(linearLayout); // linearLayout을 카드에 추가
+
+        // 클릭 리스너 추가
+        pillCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, pillDetailActivity.class);
+                intent.putExtra("medicineName", medicineName);
+                intent.putExtra("medicineCount", medicineCount);
+                intent.putExtra("medicineEffect", medicineEffect);
+                intent.putExtra("medicineImage", R.drawable.none); // Example drawable resource ID
+                context.startActivity(intent);
+            }
+        });
 
         return pillCard;
     }
