@@ -33,6 +33,9 @@ import com.medikok.frontend.model.DrugInfo;
 import com.medikok.frontend.util.ServerConnector;
 
 import java.util.List;
+
+import com.bumptech.glide.Glide;
+
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     // spring boot 서버와 연결하기 위함
@@ -55,14 +58,14 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("MainActivity", "Item Name: " + drugInfo.getItemName());
                     Log.d("MainActivity", "Effects: " + drugInfo.getEfcyQesitm());
                     Log.d("MainActivity", "Use Method: " + drugInfo.getUseMethodQesitm());
+                    Log.d("MainActivity", "Item Image: " + drugInfo.getItemImage());
 
                     String name = drugInfo.getItemName();
                     String effect = drugInfo.getEfcyQesitm();
                     String method = drugInfo.getUseMethodQesitm();
+                    String imageUrl = drugInfo.getItemImage();
 
-                    Drawable image = ContextCompat.getDrawable(MainActivity.this, R.drawable.no_image);
-
-                    CardView pillCard = makePillCard(MainActivity.this, image, name, method, effect);
+                    CardView pillCard = makePillCard(MainActivity.this, imageUrl, name, method, effect);
                     dynamicLayout.addView(pillCard);
                 }
             }
@@ -96,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private CardView makePillCard(Context context, Drawable imageDrawable, String medicineName, String medicineCount, String medicineEffect)
+    private CardView makePillCard(Context context, String imageUrl, String medicineName, String medicineCount, String medicineEffect)
     {
         // 카드 뷰 생성
         CardView pillCard = new CardView(this);
@@ -126,6 +129,12 @@ public class MainActivity extends AppCompatActivity {
 
         // 카드 썸네일을 위한 이미지뷰 생성
         ImageView imageView = new ImageView(context);
+        Log.d("MainActivity", imageUrl);
+        // url 통해서 이미지 가져오기
+        Glide.with(this)
+                .load(imageUrl)
+                .into(imageView);
+
         imageView.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -138,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
         imageView.setLayoutParams(layoutParams);
 
         // 이미지 경로 설정
-        imageView.setImageDrawable(imageDrawable);
+        //imageView.setImageDrawable(imageDrawable);
         // 이미지 alt 설정
         imageView.setContentDescription(context.getString(R.string.card_content_description));
 
@@ -204,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("medicineName", medicineName);
                 intent.putExtra("medicineCount", medicineCount);
                 intent.putExtra("medicineEffect", medicineEffect);
-                intent.putExtra("medicineImage", R.drawable.none); // Example drawable resource ID
+                intent.putExtra("medicineImage", imageUrl); // Example drawable resource ID
                 context.startActivity(intent);
             }
         });

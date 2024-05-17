@@ -35,7 +35,7 @@ public class DrugDetailActivity extends AppCompatActivity {
         String name = getIntent().getStringExtra("medicineName");
         String count = getIntent().getStringExtra("medicineCount");
         String effect = getIntent().getStringExtra("medicineEffect");
-        int imageResId = getIntent().getIntExtra("medicineImage", R.drawable.none);
+        int imageResId = getIntent().getIntExtra("medicineImage", R.drawable.pill);
 
         // 데이터 설정
         imageView.setImageResource(imageResId);
