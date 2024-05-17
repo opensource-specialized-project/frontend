@@ -1,5 +1,6 @@
 package com.medikok.frontend.activity;
 
+import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap; // 비트맵 데이터(이미지 전송 목적) 추가
@@ -12,6 +13,9 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView; // 텍스트뷰 추가
 import android.widget.ImageView; // 이미지뷰 추가
 import android.widget.LinearLayout; // 리이너레이아웃 추가
@@ -112,6 +116,11 @@ public class MainActivity extends AppCompatActivity {
                 timePickerDialog.show();
             }
         });
+
+        // 약 검색 리스트뷰의 어댑터 설정
+        CustomList adapter = new CustomList(MainActivity.this);
+        pillList = (ListView)findViewById(R.id.pillList);
+        pillList.setAdapter(adapter);
     }
 
     private CardView makePillCard(Context context, String imageUrl, String medicineName, String medicineCount, String medicineEffect)
@@ -255,6 +264,63 @@ public class MainActivity extends AppCompatActivity {
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 imageView.setImageBitmap(imageBitmap);
             }
+        }
+    }
+
+    ListView pillList;
+
+    // 약품 이미지 예시
+    Integer[] pillImages = {
+            R.drawable.pill,
+            R.drawable.pill1,
+            R.drawable.pill2,
+            R.drawable.pill3,
+            R.drawable.pill4,
+            R.drawable.pill5,
+    };
+
+    // 약품 이름 예시
+    String[] pillNames = {
+            "감기약",
+            "소화제",
+            "설사약",
+            "해열제",
+            "불면증 약",
+            "불안 억제제"
+    };
+
+    // 약품 제조사 예시
+    String[] pillManufacturers = {
+            "삼성",
+            "LG",
+            "현대",
+            "넥슨",
+            "네이버",
+            "카카오"
+    };
+
+    // 리스트뷰에 활용할 어댑터 정의
+    public class CustomList extends ArrayAdapter<String> {
+        private final Activity context;
+        public CustomList(Activity context) {
+            super(context, R.layout.pill_list_item, pillNames);
+            this.context = context;
+        }
+
+        @Override
+        public View getView(int position, View view, ViewGroup parent) {
+            LayoutInflater inflater = context.getLayoutInflater();
+            View rowView = inflater.inflate(R.layout.pill_list_item, null);
+
+            ImageView pillImage = (ImageView) rowView.findViewById(R.id.pillImage);
+            TextView pillName = (TextView) rowView.findViewById(R.id.pillName);
+            TextView pillManufacturer = (TextView) rowView.findViewById(R.id.pillManufacturer);
+
+            pillImage.setImageResource(pillImages[position]);
+            pillName.setText(pillNames[position]);
+            pillManufacturer.setText(pillManufacturers[position]);
+
+            return rowView;
         }
     }
 }
