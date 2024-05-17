@@ -19,7 +19,6 @@ import androidx.cardview.widget.CardView; // 카드뷰 추가
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -61,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     String effect = drugInfo.getEfcyQesitm();
                     String method = drugInfo.getUseMethodQesitm();
 
-                    Drawable image = ContextCompat.getDrawable(MainActivity.this, R.drawable.none);
+                    Drawable image = ContextCompat.getDrawable(MainActivity.this, R.drawable.no_image);
 
                     CardView pillCard = makePillCard(MainActivity.this, image, name, method, effect);
                     dynamicLayout.addView(pillCard);
@@ -121,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT
         ));
-        linearLayout.setPadding(15,15,15,15); // 내부 패딩 설정
+        linearLayout.setPadding(20,20,20,20); // 내부 패딩 설정
 
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -201,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         pillCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, pillDetailActivity.class);
+                Intent intent = new Intent(context, DrugDetailActivity.class);
                 intent.putExtra("medicineName", medicineName);
                 intent.putExtra("medicineCount", medicineCount);
                 intent.putExtra("medicineEffect", medicineEffect);
