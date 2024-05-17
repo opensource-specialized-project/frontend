@@ -2,8 +2,25 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="app">
-        <State />
+
+      <entry key="MainActivity">
+        <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="SERIAL_NUMBER" />
+                  <value value="R3CX10ANKRA" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-05-17T02:23:28.501668600Z" />
+        </State>
+
+      
+
       </entry>
     </value>
   </component>

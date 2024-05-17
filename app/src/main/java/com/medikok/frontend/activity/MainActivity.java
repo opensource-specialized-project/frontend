@@ -1,5 +1,6 @@
 package com.medikok.frontend.activity;
 
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap; // 비트맵 데이터(이미지 전송 목적) 추가
 import android.graphics.Typeface;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.widget.TextView; // 텍스트뷰 추가
 import android.widget.ImageView; // 이미지뷰 추가
 import android.widget.LinearLayout; // 리이너레이아웃 추가
+
+import androidx.annotation.DimenRes;
 import androidx.cardview.widget.CardView; // 카드뷰 추가
 
 import androidx.activity.EdgeToEdge;
@@ -26,6 +29,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import android.graphics.drawable.Drawable; // Drawable 추가
 import android.content.Context; // Context 추가
+import android.widget.TimePicker;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.medikok.frontend.R;
@@ -86,18 +90,29 @@ public class MainActivity extends AppCompatActivity {
         // 일단은, 플로팅 버튼을 누르면 알람 카드가 늘어나도록 만듦
         // 준혁이 형이 만들고 있는 검색창 완성되면, 그걸로 약 이름을 선택하고
         // 시간, 요일 선택하는 XML 더 만들어서 구현할 예정
+        // 문제: 인플레이팅이 이상하게 됨 -> inflater변수를 배열로 만들어 여러개 동작하도록 반복문으로 구현해야 하나?
+        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout alarmContainer = (LinearLayout)findViewById(R.id.alarmContainer);
         FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.floatingActionButton);
 
         fab.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                inflater.inflate(R.layout.alarm, alarmContainer, true);
+                TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this, android.R.style.Theme_Holo_Light_Dialog, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        inflater.inflate(R.layout.alarm, alarmContainer, true);
+
+                        TextView alarmTime = (TextView)findViewById(R.id.alarmPillDateTime);
+                        alarmTime.setText(hourOfDay + ":" + minute);
+                        alarmTime.setTextSize(2, 35);
+                    }
+                }, 0, 0, true);
+                timePickerDialog.show();
             }
         });
     }
-
 
     private CardView makePillCard(Context context, String imageUrl, String medicineName, String medicineCount, String medicineEffect)
     {
