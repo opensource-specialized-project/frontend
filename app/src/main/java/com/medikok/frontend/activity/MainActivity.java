@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView; // 텍스트뷰 추가
 import android.widget.ImageView; // 이미지뷰 추가
@@ -117,10 +118,90 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // 약 검색 리스트뷰의 어댑터 설정
+        // 약 검색 리스트뷰의 어댑터 설정(추후 xml코드 따로 만들어서 설정해볼 예정)
         CustomList adapter = new CustomList(MainActivity.this);
         pillList = (ListView)findViewById(R.id.pillList);
         pillList.setAdapter(adapter);
+
+        searchBar = (TextView) findViewById(R.id.searchBar);
+        searchButton = (Button) findViewById(R.id.searchButton);
+
+        // 약 검색 버튼 클릭시 실행(텍스트로 검색)
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            // 변수 선언
+            boolean searchSuccess = false;
+            int searchItemCount = 30; // 검색되는 약의 최대 개수를 임시로 30으로 설정
+            int[] indexOfSearch = new int[searchItemCount];
+            @Override
+            public void onClick(View v) {
+                // 버튼 클릭할 때마다 일부 변수값 초기화
+                searchSuccess = false;
+                indexOfSearch = new int[searchItemCount];
+                indexOfSearch[0] = -1;
+
+                String searchString;
+
+                pillList.setVisibility(View.VISIBLE);
+                searchString = searchBar.getText().toString();
+                Log.d("onClick", "searchString: " + searchString);
+
+                for (int i = 0, lastIndex = -1; i < pillNames.length; i++) {
+                    if(pillNames[i].contains(searchString)) {
+                        Log.d("onClick", "pillNames[" + i + "]: " + pillNames[i].toString());
+                        lastIndex++;
+                        indexOfSearch[lastIndex] = i;
+                        searchSuccess = true;
+                        Log.d("onClick", "lastIndex: " + lastIndex);
+                    }
+                    Log.d("onClick", "searchSuccess: " + searchSuccess);
+                }
+
+                CustomList newAdapter = new CustomList(MainActivity.this) {
+                    @Override
+                    public View getView(int position, View view, ViewGroup parent) {
+                        LayoutInflater inflater = context.getLayoutInflater();
+                        View rowView = inflater.inflate(R.layout.pill_list_item, null);
+
+                        ImageView pillImage = (ImageView) rowView.findViewById(R.id.pillImage);
+                        TextView pillName = (TextView) rowView.findViewById(R.id.pillName);
+                        TextView pillManufacturer = (TextView) rowView.findViewById(R.id.pillManufacturer);
+
+                        Log.d("onClick", "searchSuccess: " + searchSuccess);
+                        Log.d("onClick", "position: " + position);
+
+                        if(searchSuccess) {
+                            pillList.setVisibility(View.VISIBLE);
+
+                            Log.d("onClick", "position: " + position);
+                            Log.d("onClick", "indexOfSearch[0]: " + indexOfSearch[0]);
+                            Log.d("onClick", "indexOfSearch[1]: " + indexOfSearch[1]);
+                            Log.d("onClick", "indexOfSearch[2]: " + indexOfSearch[2]);
+                            if(position <= indexOfSearch[position]) {
+                                rowView.setVisibility(View.VISIBLE);
+
+                                pillImage.setImageResource(pillImages[indexOfSearch[position]]);
+                                pillName.setText(pillNames[indexOfSearch[position]]);
+                                pillManufacturer.setText(pillManufacturers[indexOfSearch[position]]);
+
+                                return rowView;
+                            }
+                            else {
+                                Log.d("onClick", "position: " + position);
+                                rowView.setVisibility(View.GONE);
+
+                                return rowView;
+                            }
+                        }
+                        else {
+                            pillList.setVisibility(View.GONE);
+
+                            return rowView;
+                        }
+                    }
+                };
+                pillList.setAdapter(newAdapter);
+            }
+        });
     }
 
     private CardView makePillCard(Context context, String imageUrl, String medicineName, String medicineCount, String medicineEffect)
@@ -268,6 +349,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     ListView pillList;
+    TextView searchBar;
+    Button searchButton;
 
     // 약품 이미지 예시
     Integer[] pillImages = {
@@ -301,7 +384,7 @@ public class MainActivity extends AppCompatActivity {
 
     // 리스트뷰에 활용할 어댑터 정의
     public class CustomList extends ArrayAdapter<String> {
-        private final Activity context;
+        public final Activity context;
         public CustomList(Activity context) {
             super(context, R.layout.pill_list_item, pillNames);
             this.context = context;
