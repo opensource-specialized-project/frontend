@@ -35,6 +35,7 @@ import androidx.core.view.WindowInsetsCompat;
 import android.graphics.drawable.Drawable; // Drawable 추가
 import android.content.Context; // Context 추가
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.medikok.frontend.R;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     // spring boot 서버와 연결하기 위함
     private ServerConnector serverConnector;
     private ImageView imageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         LinearLayout dynamicLayout;
@@ -101,14 +103,12 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.floatingActionButton);
 
         fab.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this, android.R.style.Theme_Holo_Light_Dialog, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         inflater.inflate(R.layout.alarm, alarmContainer, true);
-
                         TextView alarmTime = (TextView)findViewById(R.id.alarmPillDateTime);
                         alarmTime.setText(hourOfDay + ":" + minute);
                         alarmTime.setTextSize(2, 35);
