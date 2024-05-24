@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/searchFragment"
+        android:title="검색"
+        android:icon="@drawable/ic_search"/>
+
+    <item
+        android:id="@+id/alarmFragment"
+        android:title="알람"
+        android:icon="@drawable/ic_alarm"/>
+</menu>

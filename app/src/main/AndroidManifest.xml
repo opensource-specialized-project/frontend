@@ -36,13 +36,19 @@
         tools:replace="android:appComponentFactory"
         tools:targetApi="31">
         <activity
+            android:name=".AlarmFragment"
+            android:exported="false" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.DrugDetailActivity"
             android:exported="false" />
         <activity
             android:name=".AddSchedule"
             android:exported="false" />
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.NaviActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,6 +57,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.SearchPillActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.medikok.frontend"
