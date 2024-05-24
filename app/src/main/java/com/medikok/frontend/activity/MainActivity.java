@@ -78,13 +78,21 @@ public class MainActivity extends AppCompatActivity {
 
                     CardView pillCard = makePillCard(MainActivity.this, imageUrl, name, method, effect);
                     dynamicLayout.addView(pillCard);
+
+                    // SearchPillActivity로 responseData 전달
+                    Intent intent = new Intent(MainActivity.this, SearchPillActivity.class);
+
+                    // ArrayList<DrugInfo>를 JSON 형식의 문자열로 변환하여 전달
+                    String jsonData = DrugInfo.convertToJson(responseData);
+                    intent.putExtra("jsonData", jsonData);
+
+                    startActivity(intent);
                 }
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                // 오류 처리
-                Log.d("MainActivity", errorMessage);
+
             }
         });
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

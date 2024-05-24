@@ -1,5 +1,7 @@
 package com.medikok.frontend.model;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +40,12 @@ public class DrugInfo {
         this.intrcQesitm = intrcQesitm;
         this.depositMethodQesitm = depositMethodQesitm;
         this.itemImage = itemImage;
+    }
+
+    // DrugInfo 객체를 JSON 문자열로 변환하는 메서드
+    public static String convertToJson(List<DrugInfo> drugInfoList) {
+        Gson gson = new Gson();
+        return gson.toJson(drugInfoList);
     }
 
     // Getter와 Setter 메서드들
