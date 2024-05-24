@@ -79,14 +79,14 @@ public class MainActivity extends AppCompatActivity {
                     CardView pillCard = makePillCard(MainActivity.this, imageUrl, name, method, effect);
                     dynamicLayout.addView(pillCard);
 
-                    // SearchPillActivity로 responseData 전달
-                    Intent intent = new Intent(MainActivity.this, SearchPillActivity.class);
-
-                    // ArrayList<DrugInfo>를 JSON 형식의 문자열로 변환하여 전달
-                    String jsonData = DrugInfo.convertToJson(responseData);
-                    intent.putExtra("jsonData", jsonData);
-
-                    startActivity(intent);
+//                    // SearchPillActivity로 responseData 전달
+//                    Intent intent = new Intent(MainActivity.this, SearchPillActivity.class);
+//
+//                    // ArrayList<DrugInfo>를 JSON 형식의 문자열로 변환하여 전달
+//                    String jsonData = DrugInfo.convertToJson(responseData);
+//                    intent.putExtra("jsonData", jsonData);
+//
+//                    startActivity(intent);
                 }
             }
 
@@ -110,19 +110,28 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout alarmContainer = (LinearLayout)findViewById(R.id.alarmContainer);
         FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.floatingActionButton);
 
+        // 플로팅 버튼 클릭 이벤트 처리
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 새로운 LayoutInflater 인스턴스 생성
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                // 알람 카드를 담을 새로운 LinearLayout 생성
+                LinearLayout newAlarmCard = (LinearLayout) inflater.inflate(R.layout.alarm, null);
+
+                // 알람 시간 설정 다이얼로그 표시
                 TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this, android.R.style.Theme_Holo_Light_Dialog, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        inflater.inflate(R.layout.alarm, alarmContainer, true);
-                        TextView alarmTime = (TextView)findViewById(R.id.alarmPillDateTime);
+                        TextView alarmTime = newAlarmCard.findViewById(R.id.alarmPillDateTime);
                         alarmTime.setText(hourOfDay + ":" + minute);
                         alarmTime.setTextSize(2, 35);
                     }
                 }, 0, 0, true);
                 timePickerDialog.show();
+
+                // 새로운 알람 카드를 알람 컨테이너에 추가
+                alarmContainer.addView(newAlarmCard);
             }
         });
     }
