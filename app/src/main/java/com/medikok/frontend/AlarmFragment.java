@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
@@ -113,24 +114,6 @@ public class AlarmFragment extends Fragment {
             }
         });
 
-//        fab.setOnClickListener(v -> {
-//            // 새로운 LayoutInflater 인스턴스 생성
-//            LayoutInflater newInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            // 알람 카드를 담을 새로운 LinearLayout 생성
-//            LinearLayout newAlarmCard = (LinearLayout) newInflater.inflate(R.layout.alarm, null);
-//
-//            // 알람 시간 설정 다이얼로그 표시
-//            TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), android.R.style.Theme_Holo_Light_Dialog, (view1, hourOfDay, minute) -> {
-//                TextView alarmTime = newAlarmCard.findViewById(R.id.alarmPillDateTime);
-//                alarmTime.setText(hourOfDay + ":" + minute);
-//                alarmTime.setTextSize(2, 35);
-//            }, 0, 0, true);
-//            timePickerDialog.show();
-//
-//            // 새로운 알람 카드를 알람 컨테이너에 추가
-//            alarmContainer.addView(newAlarmCard);
-//        });
-
         ServerConnector.connectToServer(new ServerConnector.ServerResponseListener() {
             @Override
             public void onSuccess(List<DrugInfo> responseData) {
@@ -185,7 +168,7 @@ public class AlarmFragment extends Fragment {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT
         ));
-        linearLayout.setPadding(20,20,20,20); // 내부 패딩 설정
+        linearLayout.setPadding(40,40,40,40); // 내부 패딩 설정
 
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -193,16 +176,24 @@ public class AlarmFragment extends Fragment {
         ImageView imageView = new ImageView(context);
         Log.d("MainActivity", imageUrl);
         // url 통해서 이미지 가져오기
-        Glide.with(this)
-                .load(imageUrl)
-                .into(imageView);
+        // 이미지뷰에 이미지 설정
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            // 이미지가 있는 경우 Glide를 사용하여 이미지를 설정합니다.
+            Glide.with(context)
+                    .load(imageUrl)
+                    .error(R.drawable.no_image) // 이미지 로드 중 오류가 발생할 경우 no_image 리소스를 표시합니다.
+                    .into(imageView);
+        } else {
+            // 이미지가 없는 경우 drawable 리소스에서 no_image를 사용합니다.
+            imageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.no_image));
+        }
 
         imageView.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         ));
 
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(400, 400);
 
