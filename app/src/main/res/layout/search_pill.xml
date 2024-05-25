@@ -81,37 +81,27 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:textSize="16dp"
-            android:text="해열"
+            android:text="열"
             app:chipIconVisible="false"
             style="@style/Widget.MaterialComponents.Chip.Filter"/>
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/atopy"
+            android:id="@+id/ache"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:textSize="16dp"
-            android:text="아토피"
+            android:text="통증"
             app:chipIconVisible="false"
             style="@style/Widget.MaterialComponents.Chip.Filter"/>
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/insomnia"
+            android:id="@+id/inflammation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:textSize="16dp"
-            android:text="불면증"
-            app:chipIconVisible="false"
-            style="@style/Widget.MaterialComponents.Chip.Filter"/>
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/anxiety"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:textSize="16dp"
-            android:text="불안"
+            android:text="염증"
             app:chipIconVisible="false"
             style="@style/Widget.MaterialComponents.Chip.Filter"/>
 
@@ -126,22 +116,12 @@
             style="@style/Widget.MaterialComponents.Chip.Filter"/>
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/impulse"
+            android:id="@+id/others"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:textSize="16dp"
-            android:text="충동"
-            app:chipIconVisible="false"
-            style="@style/Widget.MaterialComponents.Chip.Filter"/>
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/autism"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:textSize="16dp"
-            android:text="자폐"
+            android:text="기타"
             app:chipIconVisible="false"
             style="@style/Widget.MaterialComponents.Chip.Filter"/>
 
@@ -151,7 +131,7 @@
     <ListView
         android:id="@+id/pillList"
         android:layout_width="360dp"
-        android:layout_height="360dp"
+        android:layout_height="400dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

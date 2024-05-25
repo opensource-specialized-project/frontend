@@ -20,7 +20,7 @@
             android:layout_marginRight="8dp"
             android:padding="10dp" />
 
-        <!-- 약 이름 + 용량과 제조사 정보 -->
+        <!-- 약 이름 + 용량과 증상 정보 -->
         <RelativeLayout
             android:id="@+id/pillInfo"
             android:layout_toRightOf="@id/pillImage"
@@ -42,11 +42,11 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
-                android:id="@+id/pillManufacturer"
+                android:id="@+id/pillSymptom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pillName"
-                android:text="제조사"
+                android:text="증상"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </RelativeLayout>
     </RelativeLayout>
