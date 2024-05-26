@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchPillActivity extends AppCompatActivity {
+    // DB로부터 받아온 전체 약 리스트 항목 100개를 저장하는 List(고정)
     List<DrugInfo> drugInfoList;
 
     ListView pillList;
@@ -40,47 +41,60 @@ public class SearchPillActivity extends AppCompatActivity {
     ArrayList<String> itemRooms = new ArrayList<>();
 
     // 리스트에 있는 전체 약의 개수
-    static final int PILL_COUNT = 6;
+    static final int PILL_COUNT = 100;
     // 검색된 리스트 항목 개수
     int itemCount = PILL_COUNT;
 
-    public class PillItem {
-        Integer pillImageResource;
-        String pillNameResource;
-        String pillSymptomResource;
 
-        PillItem(Integer pillImageResource, String pillNameResource, String pillSymptomResource) {
-            this.pillImageResource = pillImageResource;
-            this.pillNameResource = pillNameResource;
-            this.pillSymptomResource = pillSymptomResource;
-        }
 
-        public Integer getPillImageResource() {
-            return pillImageResource;
-        }
+    static final int TEST_COUNT = 6;
 
-        public String getPillNameResource() {
-            return pillNameResource;
-        }
+    String[] testNames = new String[] {
+            "타이레놀",
+            "타미플루",
+            "게보린",
+            "활명수",
+            "자양강장",
+            "레모나"
+    };
 
-        public String getPillSymptomResource() {
-            return pillSymptomResource;
-        }
-
-        public void setPillImageResource(Integer pillImageResource) {
-            this.pillImageResource = pillImageResource;
-        }
-
-        public void setPillNameResource(String pillNameResource) {
-            this.pillNameResource = pillNameResource;
-        }
-
-        public void setPillSymptomResource(String pillSymptomResource) {
-            this.pillSymptomResource = pillSymptomResource;
-        }
-    }
-
-    PillItem exampleItems[] = new PillItem[PILL_COUNT];
+//    public class PillItem {
+//        Integer pillImageResource;
+//        String pillNameResource;
+//        String pillSymptomResource;
+//
+//        PillItem(Integer pillImageResource, String pillNameResource, String pillSymptomResource) {
+//            this.pillImageResource = pillImageResource;
+//            this.pillNameResource = pillNameResource;
+//            this.pillSymptomResource = pillSymptomResource;
+//        }
+//
+//        public Integer getPillImageResource() {
+//            return pillImageResource;
+//        }
+//
+//        public String getPillNameResource() {
+//            return pillNameResource;
+//        }
+//
+//        public String getPillSymptomResource() {
+//            return pillSymptomResource;
+//        }
+//
+//        public void setPillImageResource(Integer pillImageResource) {
+//            this.pillImageResource = pillImageResource;
+//        }
+//
+//        public void setPillNameResource(String pillNameResource) {
+//            this.pillNameResource = pillNameResource;
+//        }
+//
+//        public void setPillSymptomResource(String pillSymptomResource) {
+//            this.pillSymptomResource = pillSymptomResource;
+//        }
+//    }
+//
+//    PillItem exampleItems[] = new PillItem[PILL_COUNT];
 
 
     // 증상별 필터 ON/OFF 표시를 위한 boolean타입 배열
@@ -107,7 +121,7 @@ public class SearchPillActivity extends AppCompatActivity {
 
         searchBar = (TextView) findViewById(R.id.searchBar);
         searchButton = (Button) findViewById(R.id.searchButton);
-        pillList = (ListView)findViewById(R.id.pillList);
+        pillList = (ListView) findViewById(R.id.pillList);
 
 //        // 검색 버튼 클릭 리스너 설정
 //        setupSearchButtonClickListener(searchButton);
@@ -134,10 +148,10 @@ public class SearchPillActivity extends AppCompatActivity {
         setupChipClickListener(adhdChip);
         setupChipClickListener(othersChip);
 
-        // 약 검색 리스트뷰의 어댑터 설정
-        for(int i = 0; i < itemCount; i++) {
-            itemRooms.add("temp");
-        }
+//        // 약 검색 리스트뷰의 어댑터 설정
+//        for(int i = 0; i < itemCount; i++) {
+//            itemRooms.add("temp");
+//        }
 
         CustomList adapter = new CustomList(SearchPillActivity.this, drugInfoList);
         pillList.setAdapter(adapter);
@@ -235,15 +249,13 @@ public class SearchPillActivity extends AppCompatActivity {
     // 증상별 필터 클릭시 해당 증상에 대한 약만 표시되도록 리스트뷰 업데이트
     public void setupChipClickListener(Chip chip) {
         chip.setOnClickListener(new View.OnClickListener() {
-
-            int searchItemCount = 100; // 검색되는 약의 최대 개수를 임시로 100으로 설정
-            int[] indexOfPill = new int[searchItemCount];
+            int[] indexOfPill = new int[PILL_COUNT];
             int symptomOnCount;
 
             @Override
             public void onClick(View v) {
                 // 버튼 클릭할 때마다 일부 변수값 초기화
-                indexOfPill = new int[searchItemCount];
+                indexOfPill = new int[PILL_COUNT];
                 indexOfPill[0] = -1;
                 symptomOnCount = 0;
                 itemCount = 0;
@@ -290,57 +302,60 @@ public class SearchPillActivity extends AppCompatActivity {
                 }
 
                 if (symptomOnCount < 1) {
-                    itemCount = PILL_COUNT;
-
-                    itemRooms.clear();
-                    for(int i = 0; i < itemCount; i++) {
-                        itemRooms.add("temp");
-                    }
-
                     CustomList adapter = new CustomList(SearchPillActivity.this, drugInfoList);
                     pillList = (ListView)findViewById(R.id.pillList);
                     pillList.setAdapter(adapter);
                 }
-                else if (symptomOnCount == 1) { // symptomOnCount가 2이상에서 1로 되는 경우 오류있음
+                else if (symptomOnCount == 1) {
                     int i = 0, position = 0;
                     String symptomResource;
 
+                    List<DrugInfo> searchResultsBySymptom = new ArrayList<>();
+
                     while(i < PILL_COUNT) {
-                        symptomResource = exampleItems[i].getPillSymptomResource();
+                        symptomResource = drugInfoList.get(i).getEfcyQesitm();
 
                         if (symptomSwitch[COLD]) {
                             if(symptomResource.contains("기침") || symptomResource.contains("콧물")
                                     || symptomResource.contains("코막힘") || symptomResource.contains("코감기")) {
-                                indexOfPill[position] = i;
-                                position++;
-                                itemCount++;
+//                                indexOfPill[position] = i;
+//                                position++;
+//                                itemCount++;
+
+                                searchResultsBySymptom.add(drugInfoList.get(i));
                             }
                             i++;
                         }
 
                         if (symptomSwitch[DIGESTION]) {
                             if(symptomResource.contains("소화불량")) {
-                                indexOfPill[position] = i;
-                                position++;
-                                itemCount++;
+//                                indexOfPill[position] = i;
+//                                position++;
+//                                itemCount++;
+
+                                searchResultsBySymptom.add(drugInfoList.get(i));
                             }
                             i++;
                         }
 
                         if (symptomSwitch[DIARRHEA]) {
                             if(symptomResource.contains("설사")) {
-                                indexOfPill[position] = i;
-                                position++;
-                                itemCount++;
+//                                indexOfPill[position] = i;
+//                                position++;
+//                                itemCount++;
+
+                                searchResultsBySymptom.add(drugInfoList.get(i));
                             }
                             i++;
                         }
 
                         if (symptomSwitch[FEVER]) {
                             if(symptomResource.contains("발열")) {
-                                indexOfPill[position] = i;
-                                position++;
-                                itemCount++;
+//                                indexOfPill[position] = i;
+//                                position++;
+//                                itemCount++;
+
+                                searchResultsBySymptom.add(drugInfoList.get(i));
                             }
                             i++;
                         }
@@ -350,9 +365,11 @@ public class SearchPillActivity extends AppCompatActivity {
                                     || symptomResource.contains("신경통") || symptomResource.contains("관절통")
                                     || symptomResource.contains("근육통") || symptomResource.contains("요통")
                                     || symptomResource.contains("염좌통")) {
-                                indexOfPill[position] = i;
-                                position++;
-                                itemCount++;
+//                                indexOfPill[position] = i;
+//                                position++;
+//                                itemCount++;
+
+                                searchResultsBySymptom.add(drugInfoList.get(i));
                             }
                             i++;
                         }
@@ -360,18 +377,22 @@ public class SearchPillActivity extends AppCompatActivity {
                         if (symptomSwitch[INFLAMMATION]) {
                             if(symptomResource.contains("위염") || symptomResource.contains("장염")
                                     || symptomResource.contains("대장염") || symptomResource.contains("식도염")) {
-                                indexOfPill[position] = i;
-                                position++;
-                                itemCount++;
+//                                indexOfPill[position] = i;
+//                                position++;
+//                                itemCount++;
+
+                                searchResultsBySymptom.add(drugInfoList.get(i));
                             }
                             i++;
                         }
 
                         if (symptomSwitch[ADHD]) {
                             if(symptomResource.contains("adhd") || symptomResource.contains("집중력")) {
-                                indexOfPill[position] = i;
-                                position++;
-                                itemCount++;
+//                                indexOfPill[position] = i;
+//                                position++;
+//                                itemCount++;
+
+                                searchResultsBySymptom.add(drugInfoList.get(i));
                             }
                             i++;
                         }
@@ -387,55 +408,58 @@ public class SearchPillActivity extends AppCompatActivity {
                                     && !symptomResource.contains("위염") && !symptomResource.contains("장염")
                                     && !symptomResource.contains("대장염") && !symptomResource.contains("식도염")
                                     && !symptomResource.contains("adhd") && !symptomResource.contains("집중력")) {
-                                indexOfPill[position] = i;
-                                position++;
-                                itemCount++;
+//                                indexOfPill[position] = i;
+//                                position++;
+//                                itemCount++;
+
+                                searchResultsBySymptom.add(drugInfoList.get(i));
                             }
                             i++;
                         }
                     }
-                    itemRooms.clear();
-                    for(int k = 0; k < itemCount; k++) {
-                        itemRooms.add("temp");
-                    }
 
-                    CustomList newAdapterBySymptom = new CustomList(SearchPillActivity.this) {
-                        @Override
-                        public View getView(int position, View view, ViewGroup parent) {
-                            LayoutInflater inflater = context.getLayoutInflater();
-                            View rowView = inflater.inflate(R.layout.pill_list_item, null);
-
-                            ImageView pillImage = (ImageView) rowView.findViewById(R.id.pillImage);
-                            TextView pillName = (TextView) rowView.findViewById(R.id.pillName);
-                            TextView pillSymptom = (TextView) rowView.findViewById(R.id.pillSymptom);
+                    CustomList adapterBySymptom = new CustomList(SearchPillActivity.this, searchResultsBySymptom);
+                    pillList.setAdapter(adapterBySymptom);
 
 
-                            if(position <= indexOfPill[position]) {
-                                rowView.setVisibility(View.VISIBLE);
-
-                                pillImage.setImageResource(exampleItems[indexOfPill[position]].getPillImageResource());
-                                pillName.setText(exampleItems[indexOfPill[position]].getPillNameResource());
-                                pillSymptom.setText(exampleItems[indexOfPill[position]].getPillSymptomResource());
-
-                                return rowView;
-                            }
-                            else {
-                                Log.d("onClick", "position: " + position);
-                                rowView.setVisibility(View.GONE);
-
-                                return rowView;
-                            }
-                        }
-                    };
-                    pillList.setAdapter(newAdapterBySymptom);
+//                    CustomList newAdapterBySymptom = new CustomList(SearchPillActivity.this, searchResultsBySymptom) {
+//                        @Override
+//                        public View getView(int position, View view, ViewGroup parent) {
+//                            LayoutInflater inflater = context.getLayoutInflater();
+//                            View rowView = inflater.inflate(R.layout.pill_list_item, null);
+//
+//                            ImageView pillImage = (ImageView) rowView.findViewById(R.id.pillImage);
+//                            TextView pillName = (TextView) rowView.findViewById(R.id.pillName);
+//                            TextView pillSymptom = (TextView) rowView.findViewById(R.id.pillSymptom);
+//
+//
+//                            if(position <= indexOfPill[position]) {
+//                                rowView.setVisibility(View.VISIBLE);
+//
+//                                pillImage.setImageResource(exampleItems[indexOfPill[position]].getPillImageResource());
+//                                pillName.setText(exampleItems[indexOfPill[position]].getPillNameResource());
+//                                pillSymptom.setText(exampleItems[indexOfPill[position]].getPillSymptomResource());
+//
+//                                return rowView;
+//                            }
+//                            else {
+//                                rowView.setVisibility(View.GONE);
+//
+//                                return rowView;
+//                            }
+//                        }
+//                    };
+//                    pillList.setAdapter(newAdapterBySymptom);
                 }
                 else { // 필터가 2개이상 ON일 경우
                     int i = 0, position = 0;
                     String prev = null;
                     String symptomResource;
+
+                    List<DrugInfo> searchResultsBySymptoms = new ArrayList<>();
                     if (symptomSwitch[COLD]) {
                         while (i < PILL_COUNT) {
-                            symptomResource = exampleItems[i].getPillSymptomResource();
+                            symptomResource = drugInfoList.get(i).getEfcyQesitm();
                             if(symptomResource.contains("기침") || symptomResource.contains("콧물")
                                     || symptomResource.contains("코막힘") || symptomResource.contains("코감기")) {
                                 indexOfPill[position] = i;
@@ -450,7 +474,7 @@ public class SearchPillActivity extends AppCompatActivity {
                     if (symptomSwitch[DIGESTION]) {
                         if (prev == null) {
                             while (i < PILL_COUNT) {
-                                symptomResource = exampleItems[i].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(i).getEfcyQesitm();
                                 if(symptomResource.contains("소화불량")) {
                                     indexOfPill[position] = i;
                                     position++;
@@ -466,7 +490,7 @@ public class SearchPillActivity extends AppCompatActivity {
                             itemCount = 0;
 
                             if (indexOfPill[i] >= 0) {
-                                symptomResource = exampleItems[indexOfPill[i]].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(indexOfPill[i]).getEfcyQesitm();
                                 if(symptomResource.contains("소화불량")) {
                                     indexOfPill[position] = indexOfPill[i];
                                     position++;
@@ -476,7 +500,7 @@ public class SearchPillActivity extends AppCompatActivity {
                             }
 
                             while (indexOfPill[i] > 0) {
-                                symptomResource = exampleItems[indexOfPill[i]].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(indexOfPill[i]).getEfcyQesitm();
                                 if(symptomResource.contains("소화불량")) {
                                     indexOfPill[position] = indexOfPill[i];
                                     position++;
@@ -486,21 +510,15 @@ public class SearchPillActivity extends AppCompatActivity {
                             }
 
                             if (itemCount == 0) {
-                                itemRooms.clear();
+                                searchResultsBySymptoms.clear();
 
-                                CustomList adapter = new CustomList(SearchPillActivity.this);
-                                pillList = (ListView)findViewById(R.id.pillList);
+                                CustomList adapter = new CustomList(SearchPillActivity.this, searchResultsBySymptoms);
                                 pillList.setAdapter(adapter);
 
                                 prev = "소화";
                                 return;
                             }
                             else {
-                                itemRooms.clear();
-                                for(int k = 0; k < itemCount; k++) {
-                                    itemRooms.add("temp");
-                                }
-
                                 if (indexOfPill[itemCount] > 0) {
                                     for (int j = itemCount; j < PILL_COUNT; j++) {
                                         indexOfPill[j] = 0;
@@ -514,7 +532,7 @@ public class SearchPillActivity extends AppCompatActivity {
                     if (symptomSwitch[DIARRHEA]) {
                         if (prev == null) {
                             while (i < PILL_COUNT) {
-                                symptomResource = exampleItems[i].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(i).getEfcyQesitm();
                                 if(symptomResource.contains("설사")) {
                                     indexOfPill[position] = i;
                                     position++;
@@ -530,7 +548,7 @@ public class SearchPillActivity extends AppCompatActivity {
                             itemCount = 0;
 
                             if (indexOfPill[i] >= 0) {
-                                symptomResource = exampleItems[indexOfPill[i]].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(indexOfPill[i]).getEfcyQesitm();
                                 if(symptomResource.contains("설사")) {
                                     indexOfPill[position] = indexOfPill[i];
                                     position++;
@@ -540,7 +558,7 @@ public class SearchPillActivity extends AppCompatActivity {
                             }
 
                             while (indexOfPill[i] > 0) {
-                                symptomResource = exampleItems[indexOfPill[i]].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(indexOfPill[i]).getEfcyQesitm();
                                 if(symptomResource.contains("설사")) {
                                     indexOfPill[position] = indexOfPill[i];
                                     position++;
@@ -550,21 +568,15 @@ public class SearchPillActivity extends AppCompatActivity {
                             }
 
                             if (itemCount == 0) {
-                                itemRooms.clear();
+                                searchResultsBySymptoms.clear();
 
-                                CustomList adapter = new CustomList(SearchPillActivity.this);
-                                pillList = (ListView)findViewById(R.id.pillList);
+                                CustomList adapter = new CustomList(SearchPillActivity.this, searchResultsBySymptoms);
                                 pillList.setAdapter(adapter);
 
                                 prev = "설사";
                                 return;
                             }
                             else {
-                                itemRooms.clear();
-                                for(int k = 0; k < itemCount; k++) {
-                                    itemRooms.add("temp");
-                                }
-
                                 if (indexOfPill[itemCount] > 0) {
                                     for (int j = itemCount; j < PILL_COUNT; j++) {
                                         indexOfPill[j] = 0;
@@ -578,7 +590,7 @@ public class SearchPillActivity extends AppCompatActivity {
                     if (symptomSwitch[FEVER]) {
                         if (prev == null) {
                             while (i < PILL_COUNT) {
-                                symptomResource = exampleItems[i].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(i).getEfcyQesitm();
                                 if(symptomResource.contains("발열")) {
                                     indexOfPill[position] = i;
                                     position++;
@@ -594,7 +606,7 @@ public class SearchPillActivity extends AppCompatActivity {
                             itemCount = 0;
 
                             if (indexOfPill[i] >= 0) {
-                                symptomResource = exampleItems[indexOfPill[i]].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(indexOfPill[i]).getEfcyQesitm();
                                 if(symptomResource.contains("발열")) {
                                     indexOfPill[position] = indexOfPill[i];
                                     position++;
@@ -604,7 +616,7 @@ public class SearchPillActivity extends AppCompatActivity {
                             }
 
                             while (indexOfPill[i] > 0) {
-                                symptomResource = exampleItems[indexOfPill[i]].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(indexOfPill[i]).getEfcyQesitm();
                                 if(symptomResource.contains("발열")) {
                                     indexOfPill[position] = indexOfPill[i];
                                     position++;
@@ -614,22 +626,15 @@ public class SearchPillActivity extends AppCompatActivity {
                             }
 
                             if (itemCount == 0) {
-                                itemRooms.clear();
+                                searchResultsBySymptoms.clear();
 
-                                CustomList adapter = new CustomList(SearchPillActivity.this);
-                                pillList = (ListView)findViewById(R.id.pillList);
+                                CustomList adapter = new CustomList(SearchPillActivity.this, searchResultsBySymptoms);
                                 pillList.setAdapter(adapter);
-
 
                                 prev = "열";
                                 return;
                             }
                             else {
-                                itemRooms.clear();
-                                for(int k = 0; k < itemCount; k++) {
-                                    itemRooms.add("temp");
-                                }
-
                                 if (indexOfPill[itemCount] > 0) {
                                     for (int j = itemCount; j < PILL_COUNT; j++) {
                                         indexOfPill[j] = 0;
@@ -643,7 +648,7 @@ public class SearchPillActivity extends AppCompatActivity {
                     if (symptomSwitch[ACHE]) {
                         if (prev == null) {
                             while (i < PILL_COUNT) {
-                                symptomResource = exampleItems[i].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(i).getEfcyQesitm();
                                 if(symptomResource.contains("두통") || symptomResource.contains("치통")
                                         || symptomResource.contains("신경통") || symptomResource.contains("관절통")
                                         || symptomResource.contains("근육통") || symptomResource.contains("요통")
@@ -662,7 +667,7 @@ public class SearchPillActivity extends AppCompatActivity {
                             itemCount = 0;
 
                             if (indexOfPill[i] >= 0) {
-                                symptomResource = exampleItems[indexOfPill[i]].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(indexOfPill[i]).getEfcyQesitm();
                                 if(symptomResource.contains("두통") || symptomResource.contains("치통")
                                         || symptomResource.contains("신경통") || symptomResource.contains("관절통")
                                         || symptomResource.contains("근육통") || symptomResource.contains("요통")
@@ -675,7 +680,7 @@ public class SearchPillActivity extends AppCompatActivity {
                             }
 
                             while (indexOfPill[i] > 0) {
-                                symptomResource = exampleItems[i].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(indexOfPill[i]).getEfcyQesitm();
                                 if(symptomResource.contains("두통") || symptomResource.contains("치통")
                                         || symptomResource.contains("신경통") || symptomResource.contains("관절통")
                                         || symptomResource.contains("근육통") || symptomResource.contains("요통")
@@ -688,21 +693,15 @@ public class SearchPillActivity extends AppCompatActivity {
                             }
 
                             if (itemCount == 0) {
-                                itemRooms.clear();
+                                searchResultsBySymptoms.clear();
 
-                                CustomList adapter = new CustomList(SearchPillActivity.this);
-                                pillList = (ListView)findViewById(R.id.pillList);
+                                CustomList adapter = new CustomList(SearchPillActivity.this, searchResultsBySymptoms);
                                 pillList.setAdapter(adapter);
 
                                 prev = "통증";
                                 return;
                             }
                             else {
-                                itemRooms.clear();
-                                for(int k = 0; k < itemCount; k++) {
-                                    itemRooms.add("temp");
-                                }
-
                                 if (indexOfPill[itemCount] > 0) {
                                     for (int j = itemCount; j < PILL_COUNT; j++) {
                                         indexOfPill[j] = 0;
@@ -716,7 +715,7 @@ public class SearchPillActivity extends AppCompatActivity {
                     if (symptomSwitch[INFLAMMATION]) {
                         if (prev == null) {
                             while (i < PILL_COUNT) {
-                                symptomResource = exampleItems[i].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(i).getEfcyQesitm();
                                 if(symptomResource.contains("위염") || symptomResource.contains("장염")
                                         || symptomResource.contains("대장염") || symptomResource.contains("식도염")) {
                                     indexOfPill[position] = i;
@@ -733,7 +732,7 @@ public class SearchPillActivity extends AppCompatActivity {
                             itemCount = 0;
 
                             if (indexOfPill[i] >= 0) {
-                                symptomResource = exampleItems[indexOfPill[i]].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(indexOfPill[i]).getEfcyQesitm();
                                 if(symptomResource.contains("위염") || symptomResource.contains("장염")
                                         || symptomResource.contains("대장염") || symptomResource.contains("식도염")) {
                                     indexOfPill[position] = indexOfPill[i];
@@ -744,7 +743,7 @@ public class SearchPillActivity extends AppCompatActivity {
                             }
 
                             while (indexOfPill[i] > 0) {
-                                symptomResource = exampleItems[i].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(indexOfPill[i]).getEfcyQesitm();
                                 if(symptomResource.contains("위염") || symptomResource.contains("장염")
                                         || symptomResource.contains("대장염") || symptomResource.contains("식도염")) {
                                     indexOfPill[position] = i;
@@ -755,21 +754,15 @@ public class SearchPillActivity extends AppCompatActivity {
                             }
 
                             if (itemCount == 0) {
-                                itemRooms.clear();
+                                searchResultsBySymptoms.clear();
 
-                                CustomList adapter = new CustomList(SearchPillActivity.this);
-                                pillList = (ListView)findViewById(R.id.pillList);
+                                CustomList adapter = new CustomList(SearchPillActivity.this, searchResultsBySymptoms);
                                 pillList.setAdapter(adapter);
 
                                 prev = "염증";
                                 return;
                             }
                             else {
-                                itemRooms.clear();
-                                for(int k = 0; k < itemCount; k++) {
-                                    itemRooms.add("temp");
-                                }
-
                                 if (indexOfPill[itemCount] > 0) {
                                     for (int j = itemCount; j < PILL_COUNT; j++) {
                                         indexOfPill[j] = 0;
@@ -783,7 +776,7 @@ public class SearchPillActivity extends AppCompatActivity {
                     if (symptomSwitch[ADHD]) {
                         if (prev == null) {
                             while (i < PILL_COUNT) {
-                                symptomResource = exampleItems[i].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(i).getEfcyQesitm();
                                 if(symptomResource.contains("adhd") || symptomResource.contains("집중력")) {
                                     indexOfPill[position] = i;
                                     position++;
@@ -799,7 +792,7 @@ public class SearchPillActivity extends AppCompatActivity {
                             itemCount = 0;
 
                             if (indexOfPill[i] >= 0) {
-                                symptomResource = exampleItems[indexOfPill[i]].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(indexOfPill[i]).getEfcyQesitm();
                                 if(symptomResource.contains("adhd") || symptomResource.contains("집중력")) {
                                     indexOfPill[position] = indexOfPill[i];
                                     position++;
@@ -809,7 +802,7 @@ public class SearchPillActivity extends AppCompatActivity {
                             }
 
                             while (indexOfPill[i] > 0) {
-                                symptomResource = exampleItems[indexOfPill[i]].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(indexOfPill[i]).getEfcyQesitm();
                                 if(symptomResource.contains("adhd") || symptomResource.contains("집중력")) {
                                     indexOfPill[position] = indexOfPill[i];
                                     position++;
@@ -819,9 +812,9 @@ public class SearchPillActivity extends AppCompatActivity {
                             }
 
                             if (itemCount == 0) {
-                                itemRooms.clear();
+                                searchResultsBySymptoms.clear();
 
-                                CustomList adapter = new CustomList(SearchPillActivity.this);
+                                CustomList adapter = new CustomList(SearchPillActivity.this, searchResultsBySymptoms);
                                 pillList = (ListView)findViewById(R.id.pillList);
                                 pillList.setAdapter(adapter);
 
@@ -829,11 +822,6 @@ public class SearchPillActivity extends AppCompatActivity {
                                 return;
                             }
                             else {
-                                itemRooms.clear();
-                                for(int k = 0; k < itemCount; k++) {
-                                    itemRooms.add("temp");
-                                }
-
                                 if (indexOfPill[itemCount] > 0) {
                                     for (int j = itemCount; j < PILL_COUNT; j++) {
                                         indexOfPill[j] = 0;
@@ -847,7 +835,7 @@ public class SearchPillActivity extends AppCompatActivity {
                     if (symptomSwitch[OTHERS]) {
                         if (prev == null) {
                             while (i < PILL_COUNT) {
-                                symptomResource = exampleItems[i].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(i).getEfcyQesitm();
                                 if(!symptomResource.contains("기침") && !symptomResource.contains("콧물")
                                         && !symptomResource.contains("코막힘") && !symptomResource.contains("코감기")
                                         && !symptomResource.contains("소화불량") && !symptomResource.contains("설사")
@@ -871,7 +859,7 @@ public class SearchPillActivity extends AppCompatActivity {
                             itemCount = 0;
 
                             if (indexOfPill[i] >= 0) {
-                                symptomResource = exampleItems[indexOfPill[i]].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(indexOfPill[i]).getEfcyQesitm();
                                 if(!symptomResource.contains("기침") && !symptomResource.contains("콧물")
                                         && !symptomResource.contains("코막힘") && !symptomResource.contains("코감기")
                                         && !symptomResource.contains("소화불량") && !symptomResource.contains("설사")
@@ -890,7 +878,7 @@ public class SearchPillActivity extends AppCompatActivity {
                             }
 
                             while (indexOfPill[i] > 0) {
-                                symptomResource = exampleItems[indexOfPill[i]].getPillSymptomResource();
+                                symptomResource = drugInfoList.get(indexOfPill[i]).getEfcyQesitm();
                                 if(!symptomResource.contains("기침") && !symptomResource.contains("콧물")
                                         && !symptomResource.contains("코막힘") && !symptomResource.contains("코감기")
                                         && !symptomResource.contains("소화불량") && !symptomResource.contains("설사")
@@ -909,20 +897,15 @@ public class SearchPillActivity extends AppCompatActivity {
                             }
 
                             if (itemCount == 0) {
-                                itemRooms.clear();
+                                searchResultsBySymptoms.clear();
 
-                                CustomList adapter = new CustomList(SearchPillActivity.this);
+                                CustomList adapter = new CustomList(SearchPillActivity.this, searchResultsBySymptoms);
                                 pillList = (ListView)findViewById(R.id.pillList);
                                 pillList.setAdapter(adapter);
 
                                 return;
                             }
                             else {
-                                itemRooms.clear();
-                                for(int k = 0; k < itemCount; k++) {
-                                    itemRooms.add("temp");
-                                }
-
                                 if (indexOfPill[itemCount] > 0) {
                                     for (int j = itemCount; j < PILL_COUNT; j++) {
                                         indexOfPill[j] = 0;
@@ -932,33 +915,40 @@ public class SearchPillActivity extends AppCompatActivity {
                         }
                     }
 
-                    CustomList newAdapterBySymptom = new CustomList(SearchPillActivity.this) {
-                        @Override
-                        public View getView(int position, View view, ViewGroup parent) {
-                            LayoutInflater inflater = context.getLayoutInflater();
-                            View rowView = inflater.inflate(R.layout.pill_list_item, null);
+                    for (int j = 0; j < itemCount; j++) {
+                        searchResultsBySymptoms.add(drugInfoList.get(indexOfPill[j]));
+                    }
 
-                            ImageView pillImage = (ImageView) rowView.findViewById(R.id.pillImage);
-                            TextView pillName = (TextView) rowView.findViewById(R.id.pillName);
-                            TextView pillSymptom = (TextView) rowView.findViewById(R.id.pillSymptom);
+                    CustomList adapterBySymptoms = new CustomList(SearchPillActivity.this, searchResultsBySymptoms);
+                    pillList.setAdapter(adapterBySymptoms);
 
-                            if(position <= indexOfPill[position]) {
-                                rowView.setVisibility(View.VISIBLE);
-
-                                pillImage.setImageResource(exampleItems[indexOfPill[position]].getPillImageResource());
-                                pillName.setText(exampleItems[indexOfPill[position]].getPillNameResource());
-                                pillSymptom.setText(exampleItems[indexOfPill[position]].getPillSymptomResource());
-
-                                return rowView;
-                            }
-                            else {
-                                rowView.setVisibility(View.GONE);
-
-                                return rowView;
-                            }
-                        }
-                    };
-                    pillList.setAdapter(newAdapterBySymptom);
+//                    CustomList newAdapterBySymptom = new CustomList(SearchPillActivity.this) {
+//                        @Override
+//                        public View getView(int position, View view, ViewGroup parent) {
+//                            LayoutInflater inflater = context.getLayoutInflater();
+//                            View rowView = inflater.inflate(R.layout.pill_list_item, null);
+//
+//                            ImageView pillImage = (ImageView) rowView.findViewById(R.id.pillImage);
+//                            TextView pillName = (TextView) rowView.findViewById(R.id.pillName);
+//                            TextView pillSymptom = (TextView) rowView.findViewById(R.id.pillSymptom);
+//
+//                            if(position <= indexOfPill[position]) {
+//                                rowView.setVisibility(View.VISIBLE);
+//
+//                                pillImage.setImageResource(exampleItems[indexOfPill[position]].getPillImageResource());
+//                                pillName.setText(exampleItems[indexOfPill[position]].getPillNameResource());
+//                                pillSymptom.setText(exampleItems[indexOfPill[position]].getPillSymptomResource());
+//
+//                                return rowView;
+//                            }
+//                            else {
+//                                rowView.setVisibility(View.GONE);
+//
+//                                return rowView;
+//                            }
+//                        }
+//                    };
+//                    pillList.setAdapter(newAdapterBySymptom);
                 }
             }
         });
@@ -1009,9 +999,9 @@ public class SearchPillActivity extends AppCompatActivity {
     // 예시 데이터 생성 메서드
     private List<DrugInfo> createSampleData() {
         List<DrugInfo> sampleData = new ArrayList<>();
-        for (int i = 0; i < pillNames.length; i++) {
+        for (int i = 0; i < testNames.length; i++) {
             DrugInfo drugInfo = new DrugInfo();
-            drugInfo.setItemName(pillNames[i]);
+            drugInfo.setItemName(testNames[i]);
 
             // 이미지 설정 등 필요한 데이터 설정
             sampleData.add(drugInfo);
@@ -1037,7 +1027,7 @@ public class SearchPillActivity extends AppCompatActivity {
 
             ImageView pillImage = rowView.findViewById(R.id.pillImage);
             TextView pillName = rowView.findViewById(R.id.pillName);
-            TextView pillSymptom = (TextView) rowView.findViewById(R.id.pillSymptom);
+            TextView pillSymptom = rowView.findViewById(R.id.pillSymptom);
 
             // 현재 position에 해당하는 DrugInfo 객체 가져오기
             DrugInfo currentItem = itemList.get(position);
