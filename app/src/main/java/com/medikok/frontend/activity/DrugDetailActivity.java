@@ -7,10 +7,12 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
 import com.medikok.frontend.R;
 
 public class DrugDetailActivity extends AppCompatActivity {
@@ -35,13 +37,24 @@ public class DrugDetailActivity extends AppCompatActivity {
         String name = getIntent().getStringExtra("medicineName");
         String count = getIntent().getStringExtra("medicineCount");
         String effect = getIntent().getStringExtra("medicineEffect");
-        int imageResId = getIntent().getIntExtra("medicineImage", R.drawable.pill);
+        String imgurl = getIntent().getStringExtra("medicineImage");
 
         // 데이터 설정
-        imageView.setImageResource(imageResId);
         nameView.setText(name);
         countView.setText(count);
         effectView.setText(effect);
+
+        // url을 통해 이미지 불러오기
+        if (imgurl != null && !imgurl.isEmpty()) {
+            // 이미지가 있는 경우 Glide를 사용하여 이미지를 설정합니다.
+            Glide.with(this)
+                    .load(imgurl)
+                    .error(R.drawable.no_image) // 이미지 로드 중 오류가 발생할 경우 no_image 리소스를 표시합니다.
+                    .into(imageView);
+        } else {
+            // 이미지가 없는 경우 drawable 리소스에서 no_image를 사용합니다.
+            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.no_image));
+        }
 
         // 뒤로가기 버튼 활성화
         if (getSupportActionBar() != null) {

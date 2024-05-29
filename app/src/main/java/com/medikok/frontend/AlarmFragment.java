@@ -258,10 +258,12 @@ public class AlarmFragment extends Fragment {
         linearLayout.addView(effectView); // 이 부분을 medicineCount 밑으로 이동하여 수정하였습니다.
         pillCard.addView(linearLayout); // linearLayout을 카드에 추가
 
-        // 클릭 리스너 추가
+        // 상세 페이지로 넘어가기 위한 클릭 리스너 구현
         pillCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // Intent를 통해 상세페이지에 약의 정보들을 전달
                 Intent intent = new Intent(context, DrugDetailActivity.class);
                 intent.putExtra("medicineName", medicineName);
                 intent.putExtra("medicineCount", medicineCount);
