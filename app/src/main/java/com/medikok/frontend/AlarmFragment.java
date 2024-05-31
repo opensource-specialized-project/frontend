@@ -80,19 +80,17 @@ public class AlarmFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        // 알람 표시 동적 구현(하드코딩) - 사재헌
-        // 일단은, 플로팅 버튼을 누르면 알람 카드가 늘어나도록 만듦
-        // 준혁이 형이 만들고 있는 검색창 완성되면, 그걸로 약 이름을 선택하고
-        // 시간, 요일 선택하는 XML 더 만들어서 구현할 예정
-        // 문제: 인플레이팅이 이상하게 됨 -> inflater변수를 배열로 만들어 여러개 동작하도록 반복문으로 구현해야 하나?
+        // 알람 표시 동적 구현
         View view = inflater.inflate(R.layout.fragment_alarm, container, false);
         alarmContainer = view.findViewById(R.id.alarmContainer);
         FloatingActionButton fab = view.findViewById(R.id.floatingActionButton);
 
         // 플로팅 버튼 클릭 이벤트 처리
         fab.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+
                 // 새로운 LayoutInflater 인스턴스 생성
                 LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 // 알람 카드를 담을 새로운 LinearLayout 생성
@@ -102,6 +100,7 @@ public class AlarmFragment extends Fragment {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), android.R.style.Theme_Holo_Light_Dialog, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        // 시간 설정 창 띄우기
                         TextView alarmTime = newAlarmCard.findViewById(R.id.alarmPillDateTime);
                         alarmTime.setText(hourOfDay + ":" + minute);
                         alarmTime.setTextSize(2, 35);
