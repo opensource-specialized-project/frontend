@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        FloatingActionButton btn_test = (FloatingActionButton)findViewById(R.id.btn_test);
     }
 
     private void dispatchTakePictureIntent() {
