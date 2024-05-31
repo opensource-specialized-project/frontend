@@ -40,6 +40,7 @@ import com.medikok.frontend.R;
 import com.medikok.frontend.activity.DrugDetailActivity;
 import com.medikok.frontend.activity.MainActivity;
 import com.medikok.frontend.model.DrugInfo;
+import com.medikok.frontend.util.AddSchedule;
 import com.medikok.frontend.util.ServerConnector;
 
 import java.util.List;
@@ -88,7 +89,7 @@ public class AlarmFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_alarm, container, false);
         alarmContainer = view.findViewById(R.id.alarmContainer);
         FloatingActionButton fab = view.findViewById(R.id.floatingActionButton);
-
+        FloatingActionButton btn_test = view.findViewById(R.id.btn_test);
         // 플로팅 버튼 클릭 이벤트 처리
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +112,14 @@ public class AlarmFragment extends Fragment {
 
                 // 새로운 알람 카드를 알람 컨테이너에 추가
                 alarmContainer.addView(newAlarmCard);
+            }
+        });
+        btn_test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 다른 화면으로 전환하기 위한 Intent 생성
+                Intent intent = new Intent(getActivity(), AddSchedule.class);
+                startActivity(intent); // Intent를 사용하여 새로운 화면으로 전환
             }
         });
 
