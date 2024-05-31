@@ -97,7 +97,8 @@ public class AlarmFragment extends Fragment {
                 // 알람 카드를 담을 새로운 LinearLayout 생성
                 LinearLayout newAlarmCard = (LinearLayout) inflater.inflate(R.layout.alarm, null);
 
-                // 알람 시간 설정 다이얼로그 표시
+                // 다이얼로그 표시
+                // 아래 만든 타임피커 대신 새로 만든 dialog_time_day_picker.xml 레이아웃을 적용할 예정
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), android.R.style.Theme_Holo_Light_Dialog, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
