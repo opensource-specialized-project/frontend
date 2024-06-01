@@ -1,44 +1,34 @@
 package com.medikok.frontend;
 
-import android.app.TimePickerDialog;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.provider.MediaStore;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.cardview.widget.CardView; // 카드뷰 추가
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import android.content.Context; // Context 추가
 import android.widget.TimePicker;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import com.medikok.frontend.R;
 import com.medikok.frontend.activity.DrugDetailActivity;
-import com.medikok.frontend.activity.MainActivity;
 import com.medikok.frontend.model.DrugInfo;
 import com.medikok.frontend.util.AddSchedule;
 import com.medikok.frontend.util.ServerConnector;
@@ -80,40 +70,21 @@ public class AlarmFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         // 알람 표시 동적 구현
         View view = inflater.inflate(R.layout.fragment_alarm, container, false);
         alarmContainer = view.findViewById(R.id.alarmContainer);
         FloatingActionButton fab = view.findViewById(R.id.floatingActionButton);
         FloatingActionButton btn_test = view.findViewById(R.id.btn_test);
+
         // 플로팅 버튼 클릭 이벤트 처리
         fab.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
-                // 새로운 LayoutInflater 인스턴스 생성
-                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                // 알람 카드를 담을 새로운 LinearLayout 생성
-                LinearLayout newAlarmCard = (LinearLayout) inflater.inflate(R.layout.alarm, null);
-
-                // 다이얼로그 표시
-                // 아래 만든 타임피커 대신 새로 만든 dialog_time_day_picker.xml 레이아웃을 적용할 예정
-                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), android.R.style.Theme_Holo_Light_Dialog, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        // 시간 설정 창 띄우기
-                        TextView alarmTime = newAlarmCard.findViewById(R.id.alarmPillDateTime);
-                        alarmTime.setText(hourOfDay + ":" + minute);
-                        alarmTime.setTextSize(2, 35);
-                    }
-                }, 0, 0, true);
-                timePickerDialog.show();
-
-                // 새로운 알람 카드를 알람 컨테이너에 추가
-                alarmContainer.addView(newAlarmCard);
+                showTimeDayPickerDialog();
             }
         });
+
+        // Test 버튼 클릭 이벤트 처리
         btn_test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,11 +119,83 @@ public class AlarmFragment extends Fragment {
                 // Handle the error
             }
         });
+
         return view;
     }
+    
+    // 플로팅 버튼을 누르면 시간, 교일 선택 다이얼로그가 표시되고 알람카드가 추가됨
+    private void showTimeDayPickerDialog() {
+        // Activity context를 참조
+        Context context = getActivity();
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_time_day_picker, null);
+        builder.setView(dialogView);
 
+        TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
 
+        CheckBox checkMonday = dialogView.findViewById(R.id.checkMonday);
+        CheckBox checkTuesday = dialogView.findViewById(R.id.checkTuesday);
+        CheckBox checkWednesday = dialogView.findViewById(R.id.checkWednesday);
+        CheckBox checkThursday = dialogView.findViewById(R.id.checkThursday);
+        CheckBox checkFriday = dialogView.findViewById(R.id.checkFriday);
+        CheckBox checkSaturday = dialogView.findViewById(R.id.checkSaturday);
+        CheckBox checkSunday = dialogView.findViewById(R.id.checkSunday);
+
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            // 시간 및 요일 선택값 가져오기
+            int hour = timePicker.getHour();
+            int minute = timePicker.getMinute();
+
+            // 새로운 LayoutInflater 인스턴스 생성
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            // 알람 카드를 담을 새로운 LinearLayout 생성
+            LinearLayout newAlarmCard = (LinearLayout) inflater.inflate(R.layout.alarm, null);
+
+            // 시간을 알람카드에 텍스트 표시
+            TextView alarmTime = newAlarmCard.findViewById(R.id.alarmPillDateTime);
+            alarmTime.setText(String.format("%02d:%02d", hour, minute));
+            alarmTime.setTextSize(2, 35);
+
+            // 선택한 요일을 굵게 표시
+            TextView alarmMon = newAlarmCard.findViewById(R.id.alarmPillDateMon);
+            TextView alarmTue = newAlarmCard.findViewById(R.id.alarmPillDateTue);
+            TextView alarmWed = newAlarmCard.findViewById(R.id.alarmPillDateWed);
+            TextView alarmThu = newAlarmCard.findViewById(R.id.alarmPillDateThu);
+            TextView alarmFri = newAlarmCard.findViewById(R.id.alarmPillDateFri);
+            TextView alarmSat = newAlarmCard.findViewById(R.id.alarmPillDateSat);
+            TextView alarmSun = newAlarmCard.findViewById(R.id.alarmPillDateSun);
+
+            if (checkMonday.isChecked()) {
+                alarmMon.setTypeface(null, Typeface.BOLD);
+            }
+            if (checkTuesday.isChecked()) {
+                alarmTue.setTypeface(null, Typeface.BOLD);
+            }
+            if (checkWednesday.isChecked()) {
+                alarmWed.setTypeface(null, Typeface.BOLD);
+            }
+            if (checkThursday.isChecked()) {
+                alarmThu.setTypeface(null, Typeface.BOLD);
+            }
+            if (checkFriday.isChecked()) {
+                alarmFri.setTypeface(null, Typeface.BOLD);
+            }
+            if (checkSaturday.isChecked()) {
+                alarmSat.setTypeface(null, Typeface.BOLD);
+            }
+            if (checkSunday.isChecked()) {
+                alarmSun.setTypeface(null, Typeface.BOLD);
+            }
+
+            // 새로운 알람 카드를 알람 컨테이너에 추가
+            alarmContainer.addView(newAlarmCard);
+        });
+
+        builder.setNegativeButton("Cancel", null);
+        builder.create().show();
+    }
 
     private CardView makePillCard(Context context, String imageUrl, String medicineName, String medicineCount, String medicineEffect) {
         // 카드 뷰 생성
@@ -177,7 +220,7 @@ public class AlarmFragment extends Fragment {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT
         ));
-        linearLayout.setPadding(40,40,40,40); // 내부 패딩 설정
+        linearLayout.setPadding(40, 40, 40, 40); // 내부 패딩 설정
 
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
