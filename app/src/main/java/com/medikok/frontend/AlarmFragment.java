@@ -2,6 +2,7 @@ package com.medikok.frontend;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -17,8 +18,8 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -143,7 +144,7 @@ public class AlarmFragment extends Fragment {
         CheckBox checkSaturday = dialogView.findViewById(R.id.checkSaturday);
         CheckBox checkSunday = dialogView.findViewById(R.id.checkSunday);
 
-        builder.setPositiveButton("OK", (dialog, which) -> {
+        builder.setPositiveButton("확인", (dialog, which) -> {
             // 시간 및 요일 선택값 가져오기
             int hour = timePicker.getHour();
             int minute = timePicker.getMinute();
@@ -199,10 +200,31 @@ public class AlarmFragment extends Fragment {
 
             // 새로운 알람 카드를 알람 컨테이너에 추가
             alarmContainer.addView(newAlarmCard);
+
+            // 삭제 버튼 클릭 이벤트 처리
+            Button deleteButton = newAlarmCard.findViewById(R.id.alarmDelete);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDeleteConfirmationDialog(newAlarmCard);
+                }
+            });
         });
 
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton("취소", null);
         builder.create().show();
+    }
+
+    private void showDeleteConfirmationDialog(View alarmCard) {
+        new AlertDialog.Builder(getContext())
+                .setMessage("삭제 하시겠습니까?")
+                .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        alarmContainer.removeView(alarmCard);
+                    }
+                })
+                .setNegativeButton("아니오", null)
+                .show();
     }
 
     private CardView makePillCard(Context context, String imageUrl, String medicineName, String medicineCount, String medicineEffect) {
