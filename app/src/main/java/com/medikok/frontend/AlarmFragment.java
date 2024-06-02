@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
+import androidx.annotation.Dimension;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -169,24 +170,31 @@ public class AlarmFragment extends Fragment {
 
             if (checkMonday.isChecked()) {
                 alarmMon.setTypeface(null, Typeface.BOLD);
+                alarmMon.setTextSize(Dimension.SP, 18);
             }
             if (checkTuesday.isChecked()) {
                 alarmTue.setTypeface(null, Typeface.BOLD);
+                alarmTue.setTextSize(Dimension.SP, 18);
             }
             if (checkWednesday.isChecked()) {
                 alarmWed.setTypeface(null, Typeface.BOLD);
+                alarmWed.setTextSize(Dimension.SP, 18);
             }
             if (checkThursday.isChecked()) {
                 alarmThu.setTypeface(null, Typeface.BOLD);
+                alarmThu.setTextSize(Dimension.SP, 18);
             }
             if (checkFriday.isChecked()) {
                 alarmFri.setTypeface(null, Typeface.BOLD);
+                alarmFri.setTextSize(Dimension.SP, 18);
             }
             if (checkSaturday.isChecked()) {
                 alarmSat.setTypeface(null, Typeface.BOLD);
+                alarmSat.setTextSize(Dimension.SP, 18);
             }
             if (checkSunday.isChecked()) {
                 alarmSun.setTypeface(null, Typeface.BOLD);
+                alarmSun.setTextSize(Dimension.SP, 18);
             }
 
             // 새로운 알람 카드를 알람 컨테이너에 추가
