@@ -6,6 +6,13 @@
     android:padding="16dp">
 
     <!-- TimePicker -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="시간 선택:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
     <TimePicker
         android:id="@+id/timePicker"
         android:layout_width="match_parent"
