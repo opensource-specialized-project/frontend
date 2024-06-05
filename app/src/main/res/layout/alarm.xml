@@ -40,6 +40,21 @@
                     android:textSize="12sp">
                 </TextView>
             </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+            </View>
+
+            <android.widget.Button
+                android:id="@+id/alarmDelete"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:background="#2F4F4F"
+                android:text="삭제"
+                android:textColor="#FFFFFF">
+            </android.widget.Button>
         </LinearLayout>
 
         <!--알림창 아래 흰색 부분-->
@@ -56,8 +71,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp">
-                <!-- android:text="9:00"-->
-                <!-- android:textSize="35sp"> -->
             </TextView>
 
             <!--요일(월)-->
@@ -130,13 +143,18 @@
                 android:textSize="16sp">
             </TextView>
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+            </View>
+
             <!--스위치-->
             <Switch
                 android:id="@+id/alarmPillSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="false"
-                android:layout_marginStart="50dp"
                 tools:ignore="UseSwitchCompatOrMaterialXml">
             </Switch>
         </LinearLayout>
