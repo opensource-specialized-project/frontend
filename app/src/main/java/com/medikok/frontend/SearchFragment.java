@@ -172,6 +172,7 @@ public class SearchFragment extends Fragment {
         searchBar = view.findViewById(R.id.searchBar);
         searchButton = view.findViewById(R.id.searchButton);
         pillList = view.findViewById(R.id.pillList);
+        Log.d("pillList", String.valueOf(pillList));
 
         // 검색 버튼 클릭 리스너 설정
 //        setupSearchButtonClickListener(searchButton);
@@ -1024,6 +1025,14 @@ public class SearchFragment extends Fragment {
             // 검색 결과를 이용하여 리스트뷰 업데이트
             CustomList newAdapter = new CustomList(requireActivity(), searchResults);
             pillList.setAdapter(newAdapter);
+        }
+    }
+
+    public void setDrugInfoList(List<DrugInfo> drugInfoList) {
+        this.drugInfoList = drugInfoList;
+        if (pillList != null && drugInfoList != null) {
+            ArrayAdapter<DrugInfo> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, drugInfoList);
+            pillList.setAdapter(adapter);
         }
     }
 

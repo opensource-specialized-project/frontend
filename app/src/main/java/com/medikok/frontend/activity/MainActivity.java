@@ -31,6 +31,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.graphics.drawable.Drawable; // Drawable 추가
 import android.content.Context; // Context 추가
@@ -39,6 +41,7 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.medikok.frontend.R;
+import com.medikok.frontend.SearchFragment;
 import com.medikok.frontend.model.DrugInfo;
 import com.medikok.frontend.util.ServerConnector;
 
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
     }
 
     private void dispatchTakePictureIntent() {

@@ -56,8 +56,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SearchPillActivity" />
-
+        <activity android:name=".SearchFragment"
+                  android:exported="false" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.medikok.frontend"
