@@ -2,7 +2,6 @@
 
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -11,9 +10,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.medikok.frontend.AlarmFragment;
+import com.medikok.frontend.fragment.AlarmFragment;
 import com.medikok.frontend.R;
-import com.medikok.frontend.SearchFragment;
+import com.medikok.frontend.fragment.SearchFragment;
 import com.medikok.frontend.databinding.ActivityNaviBinding;
 
 public class NaviActivity extends AppCompatActivity {

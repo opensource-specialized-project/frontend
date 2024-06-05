@@ -1,4 +1,4 @@
-package com.medikok.frontend;
+package com.medikok.frontend.fragment;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -30,6 +30,7 @@ import android.widget.TimePicker;
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import com.medikok.frontend.R;
 import com.medikok.frontend.activity.DrugDetailActivity;
 import com.medikok.frontend.model.DrugInfo;
 import com.medikok.frontend.util.AddSchedule;
@@ -124,7 +125,7 @@ public class AlarmFragment extends Fragment {
 
         return view;
     }
-    
+
     // 플로팅 버튼을 누르면 시간, 교일 선택 다이얼로그가 표시되고 알람카드가 추가됨
     private void showTimeDayPickerDialog() {
         // Activity context를 참조

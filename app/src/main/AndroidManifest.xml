@@ -36,10 +36,10 @@
         tools:replace="android:appComponentFactory"
         tools:targetApi="31">
         <activity
-            android:name=".AlarmFragment"
+            android:name=".fragment.AlarmFragment"
             android:exported="false" />
         <activity
-            android:name="SearchFragment"
+            android:name=".fragment.SearchFragment"
             android:exported="false"/>
         <activity
             android:name=".activity.MainActivity"
