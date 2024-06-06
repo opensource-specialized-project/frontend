@@ -37,42 +37,49 @@
             android:id="@+id/checkMonday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:text="월" />
 
         <CheckBox
             android:id="@+id/checkTuesday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:text="화" />
 
         <CheckBox
             android:id="@+id/checkWednesday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:text="수" />
 
         <CheckBox
             android:id="@+id/checkThursday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:text="목" />
 
         <CheckBox
             android:id="@+id/checkFriday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:text="금" />
 
         <CheckBox
             android:id="@+id/checkSaturday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:text="토" />
 
         <CheckBox
             android:id="@+id/checkSunday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:text="일" />
     </LinearLayout>
 </LinearLayout>
