@@ -216,6 +216,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
+                    android:track="@drawable/switch_track_selector"
+                    android:thumb="@drawable/switch_thumb"
                     tools:ignore="UseSwitchCompatOrMaterialXml">
                 </Switch>
             </LinearLayout>
