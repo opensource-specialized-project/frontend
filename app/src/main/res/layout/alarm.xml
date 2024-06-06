@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,182 +5,220 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--알림창 전체-->
-    <LinearLayout
+    <androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:ignore="MissingConstraints">
+        android:layout_margin="5dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="3dp">
 
-        <!--알림창 위쪽 회색 칸-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:background="#848484"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             tools:ignore="MissingConstraints">
 
-            <!-- 회색 칸 안의 약 이름-->
+            <!--알림창 위쪽 회색 칸-->
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
                 android:padding="5dp"
-                android:layout_marginEnd="10dp"
-                android:background="#FFFFFF"
-                android:orientation="horizontal">
+                android:background="#B1B0B0"
+                android:orientation="horizontal"
+                tools:ignore="MissingConstraints">
 
-                <TextView
-                    android:id="@+id/alarmPillName"
+                <androidx.cardview.widget.CardView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#000000"
-                    android:text="약 이름1"
-                    android:textSize="12sp">
-                </TextView>
+                    android:layout_margin="2dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp">
+
+                    <!-- 회색 칸 안의 약 이름-->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:layout_margin="5dp"
+                        android:background="#FFFFFF"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/alarmPillName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000000"
+                            android:text="약 이름1"
+                            android:textSize="12sp">
+                        </TextView>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                </View>
+
+                <androidx.cardview.widget.CardView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp">
+
+                    <!--수정 버튼-->
+                    <android.widget.Button
+                        android:id="@+id/alarmModify"
+                        android:layout_width="43dp"
+                        android:layout_height="match_parent"
+                        android:background="#2F4F4F"
+                        android:text="수정"
+                        android:textColor="#FFFFFF">
+                    </android.widget.Button>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp">
+
+                    <!--삭제 버튼-->
+                    <android.widget.Button
+                        android:id="@+id/alarmDelete"
+                        android:layout_width="43dp"
+                        android:layout_height="match_parent"
+                        android:background="#2F4F4F"
+                        android:text="삭제"
+                        android:textColor="#FFFFFF">
+                    </android.widget.Button>
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-            </View>
+            <!--알림창 아래 흰색 부분-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:padding="10dp"
+                android:orientation="horizontal">
 
-            <!--수정 버튼-->
-            <android.widget.Button
-                android:id="@+id/alarmModify"
-                android:layout_width="43dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="13dp"
-                android:background="#2F4F4F"
-                android:text="수정"
-                android:textColor="#FFFFFF">
-            </android.widget.Button>
+                <!--시간-->
+                <TextView
+                    android:id="@+id/alarmPillDateTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp">
+                </TextView>
 
-            <!--삭제 버튼-->
-            <android.widget.Button
-                android:id="@+id/alarmDelete"
-                android:layout_width="43dp"
-                android:layout_height="match_parent"
-                android:background="#2F4F4F"
-                android:text="삭제"
-                android:textColor="#FFFFFF">
-            </android.widget.Button>
+                <!--요일(매일)-->
+                <TextView
+                    android:id="@+id/alarmPillEveryday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="12dp"
+                    android:visibility="invisible"
+                    android:text="매일"
+                    android:textColor="#0037FF"
+                    android:textStyle="bold"
+                    android:textSize="18sp">
+                </TextView>
+
+                <!--요일(월)-->
+                <TextView
+                    android:id="@+id/alarmPillDateMon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="월"
+                    android:layout_marginEnd="5dp"
+                    android:textSize="16sp">
+                </TextView>
+
+                <!--요일(화)-->
+                <TextView
+                    android:id="@+id/alarmPillDateTue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="화"
+                    android:layout_marginEnd="5dp"
+                    android:textSize="16sp">
+                </TextView>
+
+                <!--요일(수)-->
+                <TextView
+                    android:id="@+id/alarmPillDateWed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="수"
+                    android:layout_marginEnd="5dp"
+                    android:textSize="16sp">
+                </TextView>
+
+                <!--요일(목)-->
+                <TextView
+                    android:id="@+id/alarmPillDateThu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="목"
+                    android:layout_marginEnd="5dp"
+                    android:textSize="16sp">
+                </TextView>
+
+                <!--요일(금)-->
+                <TextView
+                    android:id="@+id/alarmPillDateFri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="금"
+                    android:layout_marginEnd="5dp"
+                    android:textSize="16sp">
+                </TextView>
+
+                <!--요일(토)-->
+                <TextView
+                    android:id="@+id/alarmPillDateSat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="토"
+                    android:layout_marginEnd="5dp"
+                    android:textSize="16sp">
+                </TextView>
+
+                <!--요일(일)-->
+                <TextView
+                    android:id="@+id/alarmPillDateSun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="일"
+                    android:layout_marginEnd="5dp"
+                    android:textSize="16sp">
+                </TextView>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                </View>
+
+                <!--스위치-->
+                <Switch
+                    android:id="@+id/alarmPillSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    tools:ignore="UseSwitchCompatOrMaterialXml">
+                </Switch>
+            </LinearLayout>
         </LinearLayout>
-
-        <!--알림창 아래 흰색 부분-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFFFFF"
-            android:padding="10dp"
-            android:orientation="horizontal">
-
-            <!--시간-->
-            <TextView
-                android:id="@+id/alarmPillDateTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="20dp">
-            </TextView>
-
-            <!--요일(매일)-->
-            <TextView
-                android:id="@+id/alarmPillEveryday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="12dp"
-                android:visibility="invisible"
-                android:text="매일"
-                android:textColor="#0037FF"
-                android:textStyle="bold"
-                android:textSize="18sp">
-            </TextView>
-
-            <!--요일(월)-->
-            <TextView
-                android:id="@+id/alarmPillDateMon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="월"
-                android:layout_marginEnd="5dp"
-                android:textSize="16sp">
-            </TextView>
-
-            <!--요일(화)-->
-            <TextView
-                android:id="@+id/alarmPillDateTue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="화"
-                android:layout_marginEnd="5dp"
-                android:textSize="16sp">
-            </TextView>
-
-            <!--요일(수)-->
-            <TextView
-                android:id="@+id/alarmPillDateWed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="수"
-                android:layout_marginEnd="5dp"
-                android:textSize="16sp">
-            </TextView>
-
-            <!--요일(목)-->
-            <TextView
-                android:id="@+id/alarmPillDateThu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="목"
-                android:layout_marginEnd="5dp"
-                android:textSize="16sp">
-            </TextView>
-
-            <!--요일(금)-->
-            <TextView
-                android:id="@+id/alarmPillDateFri"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="금"
-                android:layout_marginEnd="5dp"
-                android:textSize="16sp">
-            </TextView>
-
-            <!--요일(토)-->
-            <TextView
-                android:id="@+id/alarmPillDateSat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="토"
-                android:layout_marginEnd="5dp"
-                android:textSize="16sp">
-            </TextView>
-
-            <!--요일(일)-->
-            <TextView
-                android:id="@+id/alarmPillDateSun"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="일"
-                android:layout_marginEnd="5dp"
-                android:textSize="16sp">
-            </TextView>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-            </View>
-
-            <!--스위치-->
-            <Switch
-                android:id="@+id/alarmPillSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                tools:ignore="UseSwitchCompatOrMaterialXml">
-            </Switch>
-        </LinearLayout>
-    </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </LinearLayout>
