@@ -25,7 +25,7 @@ public class ServerConnector {
     }
 
 
-    private static final String SERVER_URL = "http://172.30.67.159:8080/mysql-request/drug-info-list/get";
+    private static final String SERVER_URL = "http://172.30.133.240:8080/mysql-request/drug-info-list/get";
 
     public static void connectToServer(ServerResponseListener listener) {
         new AsyncTask<Void, Void, List<DrugInfo>>() {
