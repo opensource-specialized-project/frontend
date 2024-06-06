@@ -90,10 +90,10 @@
                 android:id="@+id/alarmPillEveryday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
+                android:layout_marginRight="12dp"
                 android:visibility="invisible"
                 android:text="매일"
-                android:textColor="#ff0000"
+                android:textColor="#0037FF"
                 android:textStyle="bold"
                 android:textSize="18sp">
             </TextView>
