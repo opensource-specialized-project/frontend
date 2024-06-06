@@ -329,6 +329,14 @@ public class AlarmFragment extends Fragment {
         // 카드 모서리 변경 (관련 메소드가 존재하지 않아 수정 필요)
         // pillCard.setCardCornerRadius(context.getResources().getDimensionPixelSize(R.dimen.card_corner_radius));
 
+        // 카드 모서리와 그림자 설정
+        pillCard.setRadius(context.getResources().getDimension(R.dimen.card_corner_radius));
+        pillCard.setCardElevation(context.getResources().getDimension(R.dimen.card_elevation));
+
+        // 터치 효과를 위해 배경 설정
+        pillCard.setClickable(true);
+        pillCard.setFocusable(true);
+
         pillCard.setCardElevation(context.getResources().getDimensionPixelSize(R.dimen.card_elevation));
 
         // 카드 안의 content를 위한 리니어레이아웃 생성

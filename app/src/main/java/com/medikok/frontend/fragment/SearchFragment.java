@@ -1,10 +1,13 @@
 package com.medikok.frontend.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.medikok.frontend.R;
+import com.medikok.frontend.activity.DrugDetailActivity;
 import com.medikok.frontend.model.DrugInfo;
 import com.medikok.frontend.util.ServerConnector;
 
@@ -823,6 +827,12 @@ public class SearchFragment extends Fragment {
             // 현재 position에 해당하는 DrugInfo 객체 가져오기
             DrugInfo currentItem = itemList.get(position);
 
+            pillName.setMaxLines(1); // 한 줄만 표기되도록
+            pillName.setEllipsize(TextUtils.TruncateAt.END); // 한 줄 넘어가면 ...으로 생략
+
+            pillSymptom.setMaxLines(1); // 한 줄만 표기되도록
+            pillSymptom.setEllipsize(TextUtils.TruncateAt.END); // 한 줄 넘어가면 ...으로 생략
+
             // DrugInfo 객체의 정보를 화면에 설정
             String imageUrl = currentItem.getItemImage();
             if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -838,7 +848,18 @@ public class SearchFragment extends Fragment {
             pillName.setText(currentItem.getItemName());
             pillSymptom.setText(currentItem.getEfcyQesitm());
 
-
+            rowView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Intent를 통해 상세페이지에 약의 정보들을 전달
+                    Intent intent = new Intent(context, DrugDetailActivity.class);
+                    intent.putExtra("medicineName", currentItem.getItemName());
+                    intent.putExtra("medicineCount", currentItem.getUseMethodQesitm());
+                    intent.putExtra("medicineEffect", currentItem.getEfcyQesitm());
+                    intent.putExtra("medicineImage", imageUrl); // Example drawable resource ID
+                    context.startActivity(intent);
+                }
+            });
             return rowView;
         }
     }
