@@ -80,12 +80,6 @@ public class SearchFragment extends Fragment {
         searchButton = (Button) view.findViewById(R.id.searchButton);
         drugListView = (ListView) view.findViewById(R.id.drugListView);
 
-<<<<<<< HEAD
-=======
-        // 검색 버튼 클릭 리스너 설정
-//        setupSearchButtonClickListener(searchButton);
-
->>>>>>> 3fccce1dc54cfbce0dfb47efa1e427c3f1887722
         // ChipGroup 및 Chip 요소 참조
         symptomGroup = view.findViewById(R.id.symptomGroup);
 
@@ -99,7 +93,6 @@ public class SearchFragment extends Fragment {
         othersChip = view.findViewById(R.id.others);
 
         // Chip 클릭 리스너 설정
-<<<<<<< HEAD
         setupChipClickListener(coldChip);
         setupChipClickListener(digestionChip);
         setupChipClickListener(diarrheaChip);
@@ -108,16 +101,6 @@ public class SearchFragment extends Fragment {
         setupChipClickListener(inflammationChip);
         setupChipClickListener(adhdChip);
         setupChipClickListener(othersChip);
-=======
-//        setupChipClickListener(coldChip);
-//        setupChipClickListener(digestionChip);
-//        setupChipClickListener(diarrheaChip);
-//        setupChipClickListener(feverChip);
-//        setupChipClickListener(acheChip);
-//        setupChipClickListener(inflammationChip);
-//        setupChipClickListener(adhdChip);
-//        setupChipClickListener(othersChip);
->>>>>>> 3fccce1dc54cfbce0dfb47efa1e427c3f1887722
 
         // DrugInfo 리스트 초기화
         drugInfoList = new ArrayList<>();
@@ -163,7 +146,6 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
-<<<<<<< HEAD
     // 증상별 필터 클릭시 해당 증상에 대한 약만 표시되도록 리스트뷰 업데이트
     public void setupChipClickListener(Chip chip) {
         chip.setOnClickListener(new View.OnClickListener() {
@@ -784,79 +766,6 @@ public class SearchFragment extends Fragment {
     }
 
     //    // 약 검색 버튼 클릭시 실행(텍스트로 검색)
-=======
-    // 약 검색 버튼 클릭시 실행(텍스트로 검색)
-//    public void setupSearchButtonClickListener(Button button) {
-//        button.setOnClickListener(new View.OnClickListener() {
-//            // 변수 선언
-//            boolean searchSuccess = false;
-//            int searchItemCount = 100; // 검색되는 약의 최대 개수를 임시로 100으로 설정
-//            int[] indexOfPill = new int[searchItemCount];
-//            @Override
-//            public void onClick(View v) {
-//                // 버튼 클릭할 때마다 일부 변수값 초기화
-//                searchSuccess = false;
-//                indexOfPill = new int[searchItemCount];
-//                indexOfPill[0] = -1;
-//                itemCount = 0;
-//
-//                String searchString = searchBar.getText().toString();
-//
-//                pillList.setVisibility(View.VISIBLE);
-//
-//                for (int i = 0, position = -1; i < PILL_COUNT; i++) {
-//                    if(exampleItems[i].getPillNameResource().contains(searchString)) {
-//                        position++;
-//                        indexOfPill[position] = i;
-//                        itemCount++;
-//                        searchSuccess = true;
-//                    }
-//                }
-//
-//                CustomList newAdapterByText = new CustomList(SearchPillActivity.this) {
-//                    @Override
-//                    public View getView(int position, View view, ViewGroup parent) {
-//                        LayoutInflater inflater = context.getLayoutInflater();
-//                        View rowView = inflater.inflate(R.layout.pill_list_item, null);
-//
-//                        ImageView pillImage = (ImageView) rowView.findViewById(R.id.pillImage);
-//                        TextView pillName = (TextView) rowView.findViewById(R.id.pillName);
-//                        TextView pillSymptom = (TextView) rowView.findViewById(R.id.pillSymptom);
-//
-//                        Log.d("onClick", "searchSuccess: " + searchSuccess);
-//                        Log.d("onClick", "position: " + position);
-//
-//                        if(searchSuccess) {
-//                            pillList.setVisibility(View.VISIBLE);
-//
-//                            if(position <= indexOfPill[position]) {
-//                                rowView.setVisibility(View.VISIBLE);
-//
-//                                pillImage.setImageResource(exampleItems[indexOfPill[position]].getPillImageResource());
-//                                pillName.setText(exampleItems[indexOfPill[position]].getPillNameResource());
-//                                pillSymptom.setText(exampleItems[indexOfPill[position]].getPillSymptomResource());
-//
-//                                return rowView;
-//                            }
-//                            else {
-//                                Log.d("onClick", "position: " + position);
-//                                rowView.setVisibility(View.GONE);
-//
-//                                return rowView;
-//                            }
-//                        }
-//                        else {
-//                            pillList.setVisibility(View.GONE);
-//
-//                            return rowView;
-//                        }
-//                    }
-//                };
-//                pillList.setAdapter(newAdapterByText);
-//            }
-//        });
-//    }
->>>>>>> 3fccce1dc54cfbce0dfb47efa1e427c3f1887722
 
     // Fragment 초기화 메서드
     public static SearchFragment newInstance(String param1, String param2) {
@@ -868,7 +777,6 @@ public class SearchFragment extends Fragment {
         return fragment;
     }
 
-<<<<<<< HEAD
     // 증상별 필터 ON/OFF로 전환해주는 Toggle 기능
     public boolean toggleSymptom(boolean symptom) {
         return !symptom;
@@ -901,18 +809,10 @@ public class SearchFragment extends Fragment {
             super(context, R.layout.pill_list_item, itemList);
             this.context = context;
             this.itemList = itemList;
-=======
-    // CustomList 내부 클래스 정의
-    public class CustomList extends ArrayAdapter<DrugInfo> {
-        // 생성자 정의
-        public CustomList(Activity context, List<DrugInfo> itemList) {
-            super(context, R.layout.pill_list_item, itemList);
->>>>>>> 3fccce1dc54cfbce0dfb47efa1e427c3f1887722
         }
 
         @Override
         public View getView(int position, View view, ViewGroup parent) {
-<<<<<<< HEAD
             LayoutInflater inflater = context.getLayoutInflater();
             View rowView = inflater.inflate(R.layout.pill_list_item, null);
 
@@ -924,18 +824,6 @@ public class SearchFragment extends Fragment {
             DrugInfo currentItem = itemList.get(position);
 
             // DrugInfo 객체의 정보를 화면에 설정
-=======
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            View rowView = inflater.inflate(R.layout.pill_list_item, null);
-
-            ImageView pillImage = rowView.findViewById(R.id.pillImage);
-            TextView pillName = rowView.findViewById(R.id.pillName);
-            TextView pillSymptom = rowView.findViewById(R.id.pillSymptom);
-
-            // 현재 position에 해당하는 DrugInfo 객체 가져오기
-            DrugInfo currentItem = getItem(position);
-
->>>>>>> 3fccce1dc54cfbce0dfb47efa1e427c3f1887722
             String imageUrl = currentItem.getItemImage();
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 // 이미지가 있는 경우 Glide를 사용하여 이미지를 설정합니다.
@@ -950,10 +838,7 @@ public class SearchFragment extends Fragment {
             pillName.setText(currentItem.getItemName());
             pillSymptom.setText(currentItem.getEfcyQesitm());
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 3fccce1dc54cfbce0dfb47efa1e427c3f1887722
             return rowView;
         }
     }

@@ -24,12 +24,7 @@ public class ServerConnector {
         void onFailure(String errorMessage);
     }
 
-
-<<<<<<< HEAD
-    private static final String SERVER_URL = "http://172.30.133.240:8080/mysql-request/drug-info-list/get";
-=======
     private static final String SERVER_URL = "http://172.30.141.4:8080/mysql-request/drug-info-list/get";
->>>>>>> 3fccce1dc54cfbce0dfb47efa1e427c3f1887722
 
     public static void connectToServer(ServerResponseListener listener) {
         new AsyncTask<Void, Void, List<DrugInfo>>() {
