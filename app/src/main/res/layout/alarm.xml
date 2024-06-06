@@ -47,9 +47,21 @@
                 android:layout_weight="1">
             </View>
 
+            <!--수정 버튼-->
+            <android.widget.Button
+                android:id="@+id/alarmModify"
+                android:layout_width="43dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="13dp"
+                android:background="#2F4F4F"
+                android:text="수정"
+                android:textColor="#FFFFFF">
+            </android.widget.Button>
+
+            <!--삭제 버튼-->
             <android.widget.Button
                 android:id="@+id/alarmDelete"
-                android:layout_width="50dp"
+                android:layout_width="43dp"
                 android:layout_height="match_parent"
                 android:background="#2F4F4F"
                 android:text="삭제"
@@ -71,6 +83,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp">
+            </TextView>
+
+            <!--요일(매일)-->
+            <TextView
+                android:id="@+id/alarmPillEveryday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:visibility="invisible"
+                android:text="매일"
+                android:textColor="#ff0000"
+                android:textStyle="bold"
+                android:textSize="18sp">
             </TextView>
 
             <!--요일(월)-->
