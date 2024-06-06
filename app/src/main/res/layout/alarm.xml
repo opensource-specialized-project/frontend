@@ -131,7 +131,7 @@
                     android:text="매일"
                     android:textColor="#0037FF"
                     android:textStyle="bold"
-                    android:textSize="18sp">
+                    android:textSize="17sp">
                 </TextView>
 
                 <!--요일(월)-->
@@ -141,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:text="월"
                     android:layout_marginEnd="5dp"
-                    android:textSize="16sp">
+                    android:textSize="14sp">
                 </TextView>
 
                 <!--요일(화)-->
@@ -151,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:text="화"
                     android:layout_marginEnd="5dp"
-                    android:textSize="16sp">
+                    android:textSize="14sp">
                 </TextView>
 
                 <!--요일(수)-->
@@ -161,7 +161,7 @@
                     android:layout_height="wrap_content"
                     android:text="수"
                     android:layout_marginEnd="5dp"
-                    android:textSize="16sp">
+                    android:textSize="14sp">
                 </TextView>
 
                 <!--요일(목)-->
@@ -171,7 +171,7 @@
                     android:layout_height="wrap_content"
                     android:text="목"
                     android:layout_marginEnd="5dp"
-                    android:textSize="16sp">
+                    android:textSize="14sp">
                 </TextView>
 
                 <!--요일(금)-->
@@ -181,7 +181,7 @@
                     android:layout_height="wrap_content"
                     android:text="금"
                     android:layout_marginEnd="5dp"
-                    android:textSize="16sp">
+                    android:textSize="14sp">
                 </TextView>
 
                 <!--요일(토)-->
@@ -191,7 +191,7 @@
                     android:layout_height="wrap_content"
                     android:text="토"
                     android:layout_marginEnd="5dp"
-                    android:textSize="16sp">
+                    android:textSize="14sp">
                 </TextView>
 
                 <!--요일(일)-->
@@ -201,7 +201,7 @@
                     android:layout_height="wrap_content"
                     android:text="일"
                     android:layout_marginEnd="5dp"
-                    android:textSize="16sp">
+                    android:textSize="14sp">
                 </TextView>
 
                 <View
@@ -215,6 +215,7 @@
                     android:id="@+id/alarmPillSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:checked="false"
                     android:track="@drawable/switch_track_selector"
                     android:thumb="@drawable/switch_thumb"

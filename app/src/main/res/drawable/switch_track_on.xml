@@ -6,11 +6,11 @@
         android:radius="15dp" />
 
     <size
-        android:width="51dp"
-        android:height="30dp" />
+        android:width="45dp"
+        android:height="25dp" />
 
     <solid
-        android:color="#920198" />
+        android:color="#FFEB3B" />
 
     <!--stroke
         android:width="2dp"
