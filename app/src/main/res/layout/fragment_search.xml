@@ -130,7 +130,7 @@
 
     <!-- ListView 추가 -->
     <ListView
-        android:id="@+id/pillList"
+        android:id="@+id/drugListView"
         android:layout_width="360dp"
         android:layout_height="400dp"
         android:layout_marginTop="16dp"
