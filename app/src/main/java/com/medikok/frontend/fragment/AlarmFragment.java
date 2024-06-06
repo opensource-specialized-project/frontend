@@ -127,7 +127,6 @@ public class AlarmFragment extends Fragment {
     }
 
     private void showTimeDayPickerDialog() {
-        // Activity context를 참조
         Context context = getActivity();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -167,8 +166,26 @@ public class AlarmFragment extends Fragment {
                     newAlarmCard.findViewById(R.id.alarmPillDateSun)
             };
 
-            for (int i = 0; i < dayCheckBoxes.length; i++) {
-                updateDayTextView(dayTextViews[i], dayCheckBoxes[i].isChecked());
+            TextView everyDayTextView = newAlarmCard.findViewById(R.id.alarmPillEveryday);
+
+            boolean allChecked = true;
+            for (CheckBox checkBox : dayCheckBoxes) {
+                if (!checkBox.isChecked()) {
+                    allChecked = false;
+                    break;
+                }
+            }
+
+            if (allChecked) {
+                for (TextView dayTextView : dayTextViews) {
+                    updateDayTextView(dayTextView, true);
+                }
+                everyDayTextView.setVisibility(View.VISIBLE);
+            } else {
+                for (int i = 0; i < dayCheckBoxes.length; i++) {
+                    updateDayTextView(dayTextViews[i], dayCheckBoxes[i].isChecked());
+                }
+                everyDayTextView.setVisibility(View.INVISIBLE);
             }
 
             alarmContainer.addView(newAlarmCard);
@@ -216,8 +233,22 @@ public class AlarmFragment extends Fragment {
                 alarmCard.findViewById(R.id.alarmPillDateSun)
         };
 
+        TextView everyDayTextView = alarmCard.findViewById(R.id.alarmPillEveryday);
+
+        boolean allChecked = true;
         for (int i = 0; i < dayTextViews.length; i++) {
-            dayCheckBoxes[i].setChecked(dayTextViews[i].getTypeface() != null && dayTextViews[i].getTypeface().isBold());
+            boolean isChecked = dayTextViews[i].getVisibility() == View.VISIBLE && dayTextViews[i].getTypeface() != null && dayTextViews[i].getTypeface().isBold();
+            dayCheckBoxes[i].setChecked(isChecked);
+            if (!isChecked) {
+                allChecked = false;
+            }
+        }
+
+        if (everyDayTextView.getVisibility() == View.VISIBLE) {
+            allChecked = true;
+            for (CheckBox checkBox : dayCheckBoxes) {
+                checkBox.setChecked(true);
+            }
         }
 
         builder.setPositiveButton("확인", (dialog, which) -> {
@@ -226,8 +257,25 @@ public class AlarmFragment extends Fragment {
 
             alarmTime.setText(String.format("%02d:%02d", hour, minute));
 
-            for (int i = 0; i < dayCheckBoxes.length; i++) {
-                updateDayTextView(dayTextViews[i], dayCheckBoxes[i].isChecked());
+            boolean allCheckedAfterEdit = true;
+            for (CheckBox checkBox : dayCheckBoxes) {
+                if (!checkBox.isChecked()) {
+                    allCheckedAfterEdit = false;
+                    break;
+                }
+            }
+
+            if (allCheckedAfterEdit) {
+                for (TextView dayTextView : dayTextViews) {
+                    updateDayTextView(dayTextView, true);
+                }
+                everyDayTextView.setVisibility(View.VISIBLE);
+            } else {
+                for (int i = 0; i < dayCheckBoxes.length; i++) {
+                    updateDayTextView(dayTextViews[i], dayCheckBoxes[i].isChecked());
+                    dayTextViews[i].setVisibility(View.VISIBLE);  // 텍스트뷰를 다시 보이도록 설정
+                }
+                everyDayTextView.setVisibility(View.INVISIBLE);
             }
         });
 
