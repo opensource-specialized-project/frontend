@@ -126,7 +126,6 @@ public class AlarmFragment extends Fragment {
         return view;
     }
 
-    // 플로팅 버튼을 누르면 시간, 교일 선택 다이얼로그가 표시되고 알람카드가 추가됨
     private void showTimeDayPickerDialog() {
         // Activity context를 참조
         Context context = getActivity();
@@ -137,95 +136,134 @@ public class AlarmFragment extends Fragment {
 
         TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
 
-        CheckBox checkMonday = dialogView.findViewById(R.id.checkMonday);
-        CheckBox checkTuesday = dialogView.findViewById(R.id.checkTuesday);
-        CheckBox checkWednesday = dialogView.findViewById(R.id.checkWednesday);
-        CheckBox checkThursday = dialogView.findViewById(R.id.checkThursday);
-        CheckBox checkFriday = dialogView.findViewById(R.id.checkFriday);
-        CheckBox checkSaturday = dialogView.findViewById(R.id.checkSaturday);
-        CheckBox checkSunday = dialogView.findViewById(R.id.checkSunday);
+        CheckBox[] dayCheckBoxes = new CheckBox[] {
+                dialogView.findViewById(R.id.checkMonday),
+                dialogView.findViewById(R.id.checkTuesday),
+                dialogView.findViewById(R.id.checkWednesday),
+                dialogView.findViewById(R.id.checkThursday),
+                dialogView.findViewById(R.id.checkFriday),
+                dialogView.findViewById(R.id.checkSaturday),
+                dialogView.findViewById(R.id.checkSunday)
+        };
 
         builder.setPositiveButton("확인", (dialog, which) -> {
-            // 시간 및 요일 선택값 가져오기
             int hour = timePicker.getHour();
             int minute = timePicker.getMinute();
 
-            // 새로운 LayoutInflater 인스턴스 생성
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            // 알람 카드를 담을 새로운 LinearLayout 생성
             LinearLayout newAlarmCard = (LinearLayout) inflater.inflate(R.layout.alarm, null);
 
-            // 시간을 알람카드에 텍스트 표시
             TextView alarmTime = newAlarmCard.findViewById(R.id.alarmPillDateTime);
             alarmTime.setText(String.format("%02d:%02d", hour, minute));
-            alarmTime.setTextSize(2, 35);
+            alarmTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
 
-            // 선택한 요일을 굵게 표시
-            TextView alarmMon = newAlarmCard.findViewById(R.id.alarmPillDateMon);
-            TextView alarmTue = newAlarmCard.findViewById(R.id.alarmPillDateTue);
-            TextView alarmWed = newAlarmCard.findViewById(R.id.alarmPillDateWed);
-            TextView alarmThu = newAlarmCard.findViewById(R.id.alarmPillDateThu);
-            TextView alarmFri = newAlarmCard.findViewById(R.id.alarmPillDateFri);
-            TextView alarmSat = newAlarmCard.findViewById(R.id.alarmPillDateSat);
-            TextView alarmSun = newAlarmCard.findViewById(R.id.alarmPillDateSun);
+            TextView[] dayTextViews = new TextView[] {
+                    newAlarmCard.findViewById(R.id.alarmPillDateMon),
+                    newAlarmCard.findViewById(R.id.alarmPillDateTue),
+                    newAlarmCard.findViewById(R.id.alarmPillDateWed),
+                    newAlarmCard.findViewById(R.id.alarmPillDateThu),
+                    newAlarmCard.findViewById(R.id.alarmPillDateFri),
+                    newAlarmCard.findViewById(R.id.alarmPillDateSat),
+                    newAlarmCard.findViewById(R.id.alarmPillDateSun)
+            };
 
-            if (checkMonday.isChecked()) {
-                alarmMon.setTypeface(null, Typeface.BOLD);
-                alarmMon.setTextSize(Dimension.SP, 18);
-            }
-            if (checkTuesday.isChecked()) {
-                alarmTue.setTypeface(null, Typeface.BOLD);
-                alarmTue.setTextSize(Dimension.SP, 18);
-            }
-            if (checkWednesday.isChecked()) {
-                alarmWed.setTypeface(null, Typeface.BOLD);
-                alarmWed.setTextSize(Dimension.SP, 18);
-            }
-            if (checkThursday.isChecked()) {
-                alarmThu.setTypeface(null, Typeface.BOLD);
-                alarmThu.setTextSize(Dimension.SP, 18);
-            }
-            if (checkFriday.isChecked()) {
-                alarmFri.setTypeface(null, Typeface.BOLD);
-                alarmFri.setTextSize(Dimension.SP, 18);
-            }
-            if (checkSaturday.isChecked()) {
-                alarmSat.setTypeface(null, Typeface.BOLD);
-                alarmSat.setTextSize(Dimension.SP, 18);
-            }
-            if (checkSunday.isChecked()) {
-                alarmSun.setTypeface(null, Typeface.BOLD);
-                alarmSun.setTextSize(Dimension.SP, 18);
+            for (int i = 0; i < dayCheckBoxes.length; i++) {
+                updateDayTextView(dayTextViews[i], dayCheckBoxes[i].isChecked());
             }
 
-            // 새로운 알람 카드를 알람 컨테이너에 추가
             alarmContainer.addView(newAlarmCard);
 
-            // 삭제 버튼 클릭 이벤트 처리
-            Button deleteButton = newAlarmCard.findViewById(R.id.alarmDelete);
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showDeleteConfirmationDialog(newAlarmCard);
-                }
-            });
+            addAlarmCardEventListeners(newAlarmCard);
         });
 
         builder.setNegativeButton("취소", null);
         builder.create().show();
     }
 
+    private void showEditTimeDayPickerDialog(LinearLayout alarmCard) {
+        Context context = getActivity();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_time_day_picker, null);
+        builder.setView(dialogView);
+
+        TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
+
+        CheckBox[] dayCheckBoxes = new CheckBox[] {
+                dialogView.findViewById(R.id.checkMonday),
+                dialogView.findViewById(R.id.checkTuesday),
+                dialogView.findViewById(R.id.checkWednesday),
+                dialogView.findViewById(R.id.checkThursday),
+                dialogView.findViewById(R.id.checkFriday),
+                dialogView.findViewById(R.id.checkSaturday),
+                dialogView.findViewById(R.id.checkSunday)
+        };
+
+        TextView alarmTime = alarmCard.findViewById(R.id.alarmPillDateTime);
+        String[] timeParts = alarmTime.getText().toString().split(":");
+        int currentHour = Integer.parseInt(timeParts[0]);
+        int currentMinute = Integer.parseInt(timeParts[1]);
+        timePicker.setHour(currentHour);
+        timePicker.setMinute(currentMinute);
+
+        TextView[] dayTextViews = new TextView[] {
+                alarmCard.findViewById(R.id.alarmPillDateMon),
+                alarmCard.findViewById(R.id.alarmPillDateTue),
+                alarmCard.findViewById(R.id.alarmPillDateWed),
+                alarmCard.findViewById(R.id.alarmPillDateThu),
+                alarmCard.findViewById(R.id.alarmPillDateFri),
+                alarmCard.findViewById(R.id.alarmPillDateSat),
+                alarmCard.findViewById(R.id.alarmPillDateSun)
+        };
+
+        for (int i = 0; i < dayTextViews.length; i++) {
+            dayCheckBoxes[i].setChecked(dayTextViews[i].getTypeface() != null && dayTextViews[i].getTypeface().isBold());
+        }
+
+        builder.setPositiveButton("확인", (dialog, which) -> {
+            int hour = timePicker.getHour();
+            int minute = timePicker.getMinute();
+
+            alarmTime.setText(String.format("%02d:%02d", hour, minute));
+
+            for (int i = 0; i < dayCheckBoxes.length; i++) {
+                updateDayTextView(dayTextViews[i], dayCheckBoxes[i].isChecked());
+            }
+        });
+
+        builder.setNegativeButton("취소", null);
+        builder.create().show();
+    }
+
+    private void updateDayTextView(TextView textView, boolean isChecked) {
+        if (isChecked) {
+            textView.setTypeface(null, Typeface.BOLD);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        } else {
+            textView.setTypeface(null, Typeface.NORMAL);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        }
+    }
+
+    // 알람카드 생성 부분에 수정 버튼 이벤트 추가
+    private void addAlarmCardEventListeners(LinearLayout alarmCard) {
+        Button deleteButton = alarmCard.findViewById(R.id.alarmDelete);
+        deleteButton.setOnClickListener(v -> showDeleteConfirmationDialog(alarmCard));
+
+        Button modifyButton = alarmCard.findViewById(R.id.alarmModify);
+        modifyButton.setOnClickListener(v -> showEditTimeDayPickerDialog(alarmCard));
+    }
+
     private void showDeleteConfirmationDialog(View alarmCard) {
         new AlertDialog.Builder(getContext())
-                .setMessage("삭제 하시겠습니까?")
-                .setPositiveButton("예", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        alarmContainer.removeView(alarmCard);
-                    }
-                })
-                .setNegativeButton("아니오", null)
-                .show();
+            .setMessage("삭제 하시겠습니까?")
+            .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    alarmContainer.removeView(alarmCard);
+                }
+            })
+            .setNegativeButton("아니오", null)
+            .show();
     }
 
     private CardView makePillCard(Context context, String imageUrl, String medicineName, String medicineCount, String medicineEffect) {
