@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
-import androidx.annotation.Dimension;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -286,7 +285,7 @@ public class AlarmFragment extends Fragment {
     private void updateDayTextView(TextView textView, boolean isChecked) {
         if (isChecked) {
             textView.setTypeface(null, Typeface.BOLD);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         } else {
             textView.setTypeface(null, Typeface.NORMAL);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
