@@ -3,6 +3,11 @@
     <style name="Base.Theme.Frontend" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:windowBackground">@color/white</item>
+
+        // 상태 바 변경
+        <item name="android:statusBarColor" tools:targetApi="l">#B1B0B0</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.Frontend" parent="Base.Theme.Frontend" />

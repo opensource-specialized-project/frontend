@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
-import androidx.annotation.Dimension;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -358,7 +357,7 @@ public class AlarmFragment extends Fragment {
     private void updateDayTextView(TextView textView, boolean isChecked) {
         if (isChecked) {
             textView.setTypeface(null, Typeface.BOLD);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         } else {
             textView.setTypeface(null, Typeface.NORMAL);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
@@ -400,6 +399,14 @@ public class AlarmFragment extends Fragment {
 
         // 카드 모서리 변경 (관련 메소드가 존재하지 않아 수정 필요)
         // pillCard.setCardCornerRadius(context.getResources().getDimensionPixelSize(R.dimen.card_corner_radius));
+
+        // 카드 모서리와 그림자 설정
+        pillCard.setRadius(context.getResources().getDimension(R.dimen.card_corner_radius));
+        pillCard.setCardElevation(context.getResources().getDimension(R.dimen.card_elevation));
+
+        // 터치 효과를 위해 배경 설정
+        pillCard.setClickable(true);
+        pillCard.setFocusable(true);
 
         pillCard.setCardElevation(context.getResources().getDimensionPixelSize(R.dimen.card_elevation));
 
@@ -457,7 +464,7 @@ public class AlarmFragment extends Fragment {
         nameViewParams.width = 300; // 폭을 400픽셀로 설정
         nameView.setLayoutParams(nameViewParams);
         nameView.setText(medicineName);
-        nameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        nameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
         nameView.setMaxLines(1); // 한 줄만 표기되도록
         nameView.setEllipsize(TextUtils.TruncateAt.END); // 한 줄 넘어가면 ...으로 생략
         nameView.setTypeface(null, Typeface.BOLD);
@@ -487,7 +494,7 @@ public class AlarmFragment extends Fragment {
         effectViewParams.width = 300; // 폭을 200픽셀로 설정
         effectView.setLayoutParams(effectViewParams);
         effectView.setText(medicineEffect);
-        effectView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
+        effectView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         effectView.setMaxLines(1);
         effectView.setEllipsize(TextUtils.TruncateAt.END);
         effectView.setTypeface(null, Typeface.BOLD);
@@ -495,7 +502,6 @@ public class AlarmFragment extends Fragment {
         // 카드 뷰에 내용 추가
         linearLayout.addView(imageView);
         linearLayout.addView(nameView);
-        linearLayout.addView(countView);
         linearLayout.addView(effectView); // 이 부분을 medicineCount 밑으로 이동하여 수정하였습니다.
         pillCard.addView(linearLayout); // linearLayout을 카드에 추가
 

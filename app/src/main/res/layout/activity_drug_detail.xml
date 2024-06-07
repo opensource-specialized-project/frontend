@@ -11,82 +11,76 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="20dp"
+        android:id="@+id/layout_content1"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:id="@+id/drug_image"
-            android:layout_width="291dp"
-            android:layout_height="194dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:contentDescription="@string/card_content_description" />
 
-        <TextView
-            android:id="@+id/drug_name"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textSize="35sp"
-            android:textStyle="bold" />
+            android:layout_height="match_parent"
+            android:padding="20dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/drug_effect1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:text="이런 효과가 있어요!"/>
+            <TextView
+                android:id="@+id/drug_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="35sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/drug_effect"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textSize="20sp" />
+            <TextView
+                android:id="@+id/drug_effect1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:text="효능"/>
 
-        <TextView
-            android:id="@+id/drug_count1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:text="이렇게 사용하세요!"/>
+            <TextView
+                android:id="@+id/drug_effect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="20sp" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginTop="10dp">
+            <TextView
+                android:id="@+id/drug_count1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:text="복용법"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/drug_count_layout">
 
                 <TextView
                     android:id="@+id/drug_count"
                     android:layout_width="match_parent"
-                    android:layout_height="173dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:textSize="20sp" />
-            </LinearLayout>
-        </ScrollView>
 
-        <ImageButton
-            android:id="@+id/back_button"
-            android:layout_width="51dp"
-            android:layout_height="54dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="back"
-            android:onClick="onBackButtonClicked"
-            android:scaleType="fitCenter"
-            android:src="@drawable/back" />
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 
