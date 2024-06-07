@@ -1,10 +1,10 @@
 package com.medikok.frontend.fragment;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
@@ -24,8 +24,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -42,6 +42,7 @@ import com.medikok.frontend.util.ServerConnector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AlarmFragment extends Fragment {
     List<String> drugNameList = new ArrayList<>();
@@ -88,7 +89,6 @@ public class AlarmFragment extends Fragment {
         FloatingActionButton fab = view.findViewById(R.id.floatingActionButton);
         FloatingActionButton btn_test = view.findViewById(R.id.btn_test);
 
-
         // 플로팅 버튼 클릭 이벤트 처리
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +128,6 @@ public class AlarmFragment extends Fragment {
                     // 가져온 데이터를 drugNameList에 저장
                     drugNameList.add(drugInfo.getItemName());
                 }
-
             }
 
             @Override
@@ -136,6 +135,8 @@ public class AlarmFragment extends Fragment {
                 // Handle the error
             }
         });
+
+        loadAlarmsFromPreferences();  // Load alarms from SharedPreferences when the fragment is created
 
         return view;
     }
@@ -234,6 +235,7 @@ public class AlarmFragment extends Fragment {
             alarmContainer.addView(newAlarmCard);
 
             addAlarmCardEventListeners(newAlarmCard);
+            saveAlarmToPreferences(newAlarmCard);  // Save the new alarm to SharedPreferences
         });
 
         builder.setNegativeButton("취소", null);
@@ -348,6 +350,8 @@ public class AlarmFragment extends Fragment {
                 }
                 everyDayTextView.setVisibility(View.INVISIBLE);
             }
+
+            saveAlarmToPreferences(alarmCard);  // Save the updated alarm to SharedPreferences
         });
 
         builder.setNegativeButton("취소", null);
@@ -371,19 +375,139 @@ public class AlarmFragment extends Fragment {
 
         Button modifyButton = alarmCard.findViewById(R.id.alarmModify);
         modifyButton.setOnClickListener(v -> showEditTimeDayPickerDialog(alarmCard));
+
+        Switch alarmSwitch = alarmCard.findViewById(R.id.alarmPillSwitch);
+        alarmSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            saveAlarmToPreferences(alarmCard);
+        });
     }
 
-    private void showDeleteConfirmationDialog(View alarmCard) {
+    private void showDeleteConfirmationDialog(final View alarmCard) {
         new AlertDialog.Builder(getContext())
-            .setMessage("삭제 하시겠습니까?")
-            .setPositiveButton("예", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    alarmContainer.removeView(alarmCard);
-                }
-            })
-            .setNegativeButton("아니오", null)
-            .show();
+                .setMessage("삭제 하시겠습니까?")
+                .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        alarmContainer.removeView(alarmCard);
+                        removeAlarmFromPreferences((LinearLayout) alarmCard); // LinearLayout로 캐스팅
+                    }
+                })
+                .setNegativeButton("아니오", null)
+                .show();
     }
+
+    private void saveAlarmToPreferences(LinearLayout alarmCard) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("AlarmPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        TextView alarmTime = alarmCard.findViewById(R.id.alarmPillDateTime);
+        TextView alarmPillName = alarmCard.findViewById(R.id.alarmPillName);
+        Switch alarmSwitch = alarmCard.findViewById(R.id.alarmPillSwitch);
+
+        String key = alarmTime.getText().toString();
+        editor.putString(key + "_name", alarmPillName.getText().toString());
+        editor.putBoolean(key + "_switch", alarmSwitch.isChecked());
+
+        TextView[] dayTextViews = new TextView[] {
+                alarmCard.findViewById(R.id.alarmPillDateMon),
+                alarmCard.findViewById(R.id.alarmPillDateTue),
+                alarmCard.findViewById(R.id.alarmPillDateWed),
+                alarmCard.findViewById(R.id.alarmPillDateThu),
+                alarmCard.findViewById(R.id.alarmPillDateFri),
+                alarmCard.findViewById(R.id.alarmPillDateSat),
+                alarmCard.findViewById(R.id.alarmPillDateSun)
+        };
+
+        for (int i = 0; i < dayTextViews.length; i++) {
+            editor.putBoolean(key + "_day" + i, dayTextViews[i].getTypeface() != null && dayTextViews[i].getTypeface().isBold());
+        }
+
+        editor.apply();
+    }
+
+    private void removeAlarmFromPreferences(LinearLayout alarmCard) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("AlarmPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        TextView alarmTime = alarmCard.findViewById(R.id.alarmPillDateTime);
+        String key = alarmTime.getText().toString();
+
+        editor.remove(key + "_name");
+        editor.remove(key + "_switch");
+
+        TextView[] dayTextViews = new TextView[] {
+                alarmCard.findViewById(R.id.alarmPillDateMon),
+                alarmCard.findViewById(R.id.alarmPillDateTue),
+                alarmCard.findViewById(R.id.alarmPillDateWed),
+                alarmCard.findViewById(R.id.alarmPillDateThu),
+                alarmCard.findViewById(R.id.alarmPillDateFri),
+                alarmCard.findViewById(R.id.alarmPillDateSat),
+                alarmCard.findViewById(R.id.alarmPillDateSun)
+        };
+
+        for (int i = 0; i < dayTextViews.length; i++) {
+            editor.remove(key + "_day" + i);
+        }
+
+        editor.apply();
+    }
+
+    private void loadAlarmsFromPreferences() {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("AlarmPreferences", Context.MODE_PRIVATE);
+        Map<String, ?> allEntries = sharedPreferences.getAll();
+
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            String key = entry.getKey();
+            if (key.endsWith("_name")) {
+                String timeKey = key.replace("_name", "");
+                String name = (String) entry.getValue();
+                boolean switchState = sharedPreferences.getBoolean(timeKey + "_switch", false);
+
+                LinearLayout newAlarmCard = (LinearLayout) inflater.inflate(R.layout.alarm, null);
+
+                TextView alarmTime = newAlarmCard.findViewById(R.id.alarmPillDateTime);
+                alarmTime.setText(timeKey);
+                alarmTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+
+                TextView alarmPillName = newAlarmCard.findViewById(R.id.alarmPillName);
+                alarmPillName.setText(name);
+
+                Switch alarmSwitch = newAlarmCard.findViewById(R.id.alarmPillSwitch);
+                alarmSwitch.setChecked(switchState);
+
+                TextView[] dayTextViews = new TextView[] {
+                        newAlarmCard.findViewById(R.id.alarmPillDateMon),
+                        newAlarmCard.findViewById(R.id.alarmPillDateTue),
+                        newAlarmCard.findViewById(R.id.alarmPillDateWed),
+                        newAlarmCard.findViewById(R.id.alarmPillDateThu),
+                        newAlarmCard.findViewById(R.id.alarmPillDateFri),
+                        newAlarmCard.findViewById(R.id.alarmPillDateSat),
+                        newAlarmCard.findViewById(R.id.alarmPillDateSun)
+                };
+
+                boolean allChecked = true;
+                for (int i = 0; i < dayTextViews.length; i++) {
+                    boolean isChecked = sharedPreferences.getBoolean(timeKey + "_day" + i, false);
+                    updateDayTextView(dayTextViews[i], isChecked);
+                    if (!isChecked) {
+                        allChecked = false;
+                    }
+                }
+
+                TextView everyDayTextView = newAlarmCard.findViewById(R.id.alarmPillEveryday);
+                if (allChecked) {
+                    everyDayTextView.setVisibility(View.VISIBLE);
+                } else {
+                    everyDayTextView.setVisibility(View.INVISIBLE);
+                }
+
+                alarmContainer.addView(newAlarmCard);
+                addAlarmCardEventListeners(newAlarmCard);
+            }
+        }
+    }
+
 
     private CardView makePillCard(Context context, String imageUrl, String medicineName, String medicineCount, String medicineEffect) {
         // 카드 뷰 생성
