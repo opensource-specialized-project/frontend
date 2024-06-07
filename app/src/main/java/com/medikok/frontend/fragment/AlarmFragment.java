@@ -2,8 +2,8 @@ package com.medikok.frontend.fragment;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -35,7 +36,12 @@ import com.medikok.frontend.model.DrugInfo;
 import com.medikok.frontend.util.AddSchedule;
 import com.medikok.frontend.util.ServerConnector;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
+import java.util.Map;
 
 public class AlarmFragment extends Fragment {
 
@@ -77,6 +83,8 @@ public class AlarmFragment extends Fragment {
         alarmContainer = view.findViewById(R.id.alarmContainer);
         FloatingActionButton fab = view.findViewById(R.id.floatingActionButton);
         FloatingActionButton btn_test = view.findViewById(R.id.btn_test);
+
+        loadAlarmCards(); // 저장된 알람 카드를 불러옵니다.
 
         // 플로팅 버튼 클릭 이벤트 처리
         fab.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +133,118 @@ public class AlarmFragment extends Fragment {
         return view;
     }
 
+    // 스위치 상태를 저장하는 메서드
+    private void saveSwitchState(String alarmId, boolean isChecked) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("switch_prefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(alarmId, isChecked);
+        editor.apply();
+    }
+
+    // 스위치 상태를 불러오는 메서드
+    private boolean getSwitchState(String alarmId) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("switch_prefs", Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(alarmId, false); // 기본값은 false로 설정
+    }
+
+    // 만들어진 알람 카드를 보여주는 알람카드 메서드
+    private void addAlarmCardEventListeners(LinearLayout alarmCard, String alarmId) {
+        Button deleteButton = alarmCard.findViewById(R.id.alarmDelete);
+        deleteButton.setOnClickListener(v -> showDeleteConfirmationDialog(alarmCard, alarmId));
+
+        Button modifyButton = alarmCard.findViewById(R.id.alarmModify);
+        modifyButton.setOnClickListener(v -> showEditTimeDayPickerDialog(alarmCard, alarmId));
+
+        Switch alarmSwitch = alarmCard.findViewById(R.id.alarmPillSwitch);
+        alarmSwitch.setChecked(getSwitchState(alarmId)); // 스위치 상태 복원
+
+        alarmSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            saveSwitchState(alarmId, isChecked); // 스위치 상태 저장
+        });
+    }
+
+    // 알람 카드를 형태를 만드는 메서드
+    private void createAlarmCard(String alarmId, String time, boolean[] days, boolean isSwitchOn) {
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LinearLayout newAlarmCard = (LinearLayout) inflater.inflate(R.layout.alarm, null);
+
+        TextView alarmTime = newAlarmCard.findViewById(R.id.alarmPillDateTime);
+        alarmTime.setText(time);
+        alarmTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+
+        TextView[] dayTextViews = new TextView[] {
+                newAlarmCard.findViewById(R.id.alarmPillDateMon),
+                newAlarmCard.findViewById(R.id.alarmPillDateTue),
+                newAlarmCard.findViewById(R.id.alarmPillDateWed),
+                newAlarmCard.findViewById(R.id.alarmPillDateThu),
+                newAlarmCard.findViewById(R.id.alarmPillDateFri),
+                newAlarmCard.findViewById(R.id.alarmPillDateSat),
+                newAlarmCard.findViewById(R.id.alarmPillDateSun)
+        };
+
+        TextView everyDayTextView = newAlarmCard.findViewById(R.id.alarmPillEveryday);
+
+        boolean allChecked = true;
+        for (int i = 0; i < days.length; i++) {
+            updateDayTextView(dayTextViews[i], days[i]);
+            if (!days[i]) {
+                allChecked = false;
+            }
+        }
+
+        if (allChecked) {
+            everyDayTextView.setVisibility(View.VISIBLE);
+        } else {
+            everyDayTextView.setVisibility(View.INVISIBLE);
+        }
+
+        alarmContainer.addView(newAlarmCard);
+
+        Switch alarmSwitch = newAlarmCard.findViewById(R.id.alarmPillSwitch);
+        alarmSwitch.setChecked(isSwitchOn); // 스위치 상태 복원
+
+        alarmSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            saveSwitchState(alarmId, isChecked); // 스위치 상태 저장
+        });
+
+        addAlarmCardEventListeners(newAlarmCard, alarmId);
+    }
+
+    // 저장된 알람카드를 불러오는 메서드
+    private void loadAlarmCards() {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("alarm_prefs", Context.MODE_PRIVATE);
+        Map<String, ?> allAlarms = sharedPreferences.getAll();
+
+        for (Map.Entry<String, ?> entry : allAlarms.entrySet()) {
+            String alarmId = entry.getKey();
+            String alarmDataString = (String) entry.getValue();
+
+            try {
+                JSONObject alarmData = new JSONObject(alarmDataString);
+                String time = alarmData.getString("time");
+                JSONArray daysArray = alarmData.getJSONArray("days");
+                boolean[] days = new boolean[daysArray.length()];
+                for (int i = 0; i < daysArray.length(); i++) {
+                    days[i] = daysArray.getBoolean(i);
+                }
+                boolean isSwitchOn = getSwitchState(alarmId); // 스위치 상태 복원
+
+                createAlarmCard(alarmId, time, days, isSwitchOn);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // 알람 카드가 삭제되면 저장된 카드 데이터도 삭제하는 메서드
+    private void removeAlarmCardState(String alarmId) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("alarm_prefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(alarmId);
+        editor.apply();
+    }
+
+    // 플로팅 버튼을 눌렀을 때 카드를 생성하기 위한 시간, 요일 선택 창이 뜨는 메서드
     private void showTimeDayPickerDialog() {
         Context context = getActivity();
 
@@ -187,16 +307,19 @@ public class AlarmFragment extends Fragment {
                 everyDayTextView.setVisibility(View.INVISIBLE);
             }
 
-            alarmContainer.addView(newAlarmCard);
+            // 고유한 alarmId 생성 (예: 현재 시간 기반)
+            String alarmId = "alarm_" + System.currentTimeMillis();
 
-            addAlarmCardEventListeners(newAlarmCard);
+            alarmContainer.addView(newAlarmCard);
+            addAlarmCardEventListeners(newAlarmCard, alarmId);
         });
 
         builder.setNegativeButton("취소", null);
         builder.create().show();
     }
 
-    private void showEditTimeDayPickerDialog(LinearLayout alarmCard) {
+    // 알람 카드 창 수정하기 위한 창이 뜨는 메서드
+    private void showEditTimeDayPickerDialog(LinearLayout alarmCard, String alarmId) {
         Context context = getActivity();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -282,6 +405,19 @@ public class AlarmFragment extends Fragment {
         builder.create().show();
     }
 
+    // 알람 카드 삭제하고 삭제 확인을 묻는 창이 뜨는 메서드
+    private void showDeleteConfirmationDialog(View alarmCard, String alarmId) {
+        new AlertDialog.Builder(getContext())
+                .setMessage("삭제 하시겠습니까?")
+                .setPositiveButton("예", (dialog, which) -> {
+                    alarmContainer.removeView(alarmCard);
+                    removeAlarmCardState(alarmId); // SharedPreferences에서 상태 제거
+                })
+                .setNegativeButton("아니오", null)
+                .show();
+    }
+
+    // 알람 카드에 요일을 표시해 주는 메서드
     private void updateDayTextView(TextView textView, boolean isChecked) {
         if (isChecked) {
             textView.setTypeface(null, Typeface.BOLD);
@@ -290,27 +426,6 @@ public class AlarmFragment extends Fragment {
             textView.setTypeface(null, Typeface.NORMAL);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         }
-    }
-
-    // 알람카드 생성 부분에 수정 버튼 이벤트 추가
-    private void addAlarmCardEventListeners(LinearLayout alarmCard) {
-        Button deleteButton = alarmCard.findViewById(R.id.alarmDelete);
-        deleteButton.setOnClickListener(v -> showDeleteConfirmationDialog(alarmCard));
-
-        Button modifyButton = alarmCard.findViewById(R.id.alarmModify);
-        modifyButton.setOnClickListener(v -> showEditTimeDayPickerDialog(alarmCard));
-    }
-
-    private void showDeleteConfirmationDialog(View alarmCard) {
-        new AlertDialog.Builder(getContext())
-            .setMessage("삭제 하시겠습니까?")
-            .setPositiveButton("예", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    alarmContainer.removeView(alarmCard);
-                }
-            })
-            .setNegativeButton("아니오", null)
-            .show();
     }
 
     private CardView makePillCard(Context context, String imageUrl, String medicineName, String medicineCount, String medicineEffect) {
