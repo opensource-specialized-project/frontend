@@ -392,7 +392,7 @@ public class AlarmFragment extends Fragment {
         nameViewParams.width = 300; // 폭을 400픽셀로 설정
         nameView.setLayoutParams(nameViewParams);
         nameView.setText(medicineName);
-        nameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        nameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
         nameView.setMaxLines(1); // 한 줄만 표기되도록
         nameView.setEllipsize(TextUtils.TruncateAt.END); // 한 줄 넘어가면 ...으로 생략
         nameView.setTypeface(null, Typeface.BOLD);
@@ -422,7 +422,7 @@ public class AlarmFragment extends Fragment {
         effectViewParams.width = 300; // 폭을 200픽셀로 설정
         effectView.setLayoutParams(effectViewParams);
         effectView.setText(medicineEffect);
-        effectView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
+        effectView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         effectView.setMaxLines(1);
         effectView.setEllipsize(TextUtils.TruncateAt.END);
         effectView.setTypeface(null, Typeface.BOLD);
@@ -430,7 +430,6 @@ public class AlarmFragment extends Fragment {
         // 카드 뷰에 내용 추가
         linearLayout.addView(imageView);
         linearLayout.addView(nameView);
-        linearLayout.addView(countView);
         linearLayout.addView(effectView); // 이 부분을 medicineCount 밑으로 이동하여 수정하였습니다.
         pillCard.addView(linearLayout); // linearLayout을 카드에 추가
 

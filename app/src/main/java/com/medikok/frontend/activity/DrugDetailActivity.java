@@ -1,7 +1,9 @@
 package com.medikok.frontend.activity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +19,12 @@ import com.medikok.frontend.R;
 
 public class DrugDetailActivity extends AppCompatActivity {
 
+    private TextView countView;
+    private boolean isExpanded = false;
+    private static final int MAX_LINES_COLLAPSED = 2;
+
+    private Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +38,6 @@ public class DrugDetailActivity extends AppCompatActivity {
 
         ImageView imageView = findViewById(R.id.drug_image);
         TextView nameView = findViewById(R.id.drug_name);
-        TextView countView = findViewById(R.id.drug_count);
         TextView effectView = findViewById(R.id.drug_effect);
 
         // Intent에서 데이터 가져오기
@@ -38,6 +45,15 @@ public class DrugDetailActivity extends AppCompatActivity {
         String count = getIntent().getStringExtra("medicineCount");
         String effect = getIntent().getStringExtra("medicineEffect");
         String imgurl = getIntent().getStringExtra("medicineImage");
+
+        countView = findViewById(R.id.drug_count);
+        countView.setMaxLines(MAX_LINES_COLLAPSED);
+        countView.setEllipsize(TextUtils.TruncateAt.END);
+
+        button = findViewById(R.id.button_more);
+
+        button.setBackgroundResource(R.drawable.arrow_down);
+        button.setOnClickListener(v -> toggleExpansion());
 
         // 데이터 설정
         nameView.setText(name);
@@ -70,5 +86,17 @@ public class DrugDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void toggleExpansion() {
+        if (isExpanded) {
+            button.setBackgroundResource(R.drawable.arrow_down);
+            countView.setMaxLines(MAX_LINES_COLLAPSED);
+            isExpanded = false;
+        } else {
+            button.setBackgroundResource(R.drawable.arrow_up);
+            countView.setMaxLines(Integer.MAX_VALUE);
+            isExpanded = true;
+        }
     }
 }
