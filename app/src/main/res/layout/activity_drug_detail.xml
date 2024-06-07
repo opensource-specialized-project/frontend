@@ -66,7 +66,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/drug_count_layout">
 
                 <TextView
                     android:id="@+id/drug_count"
@@ -75,17 +78,10 @@
                     android:layout_marginTop="8dp"
                     android:textSize="20sp" />
 
-                <Button
-                    android:id="@+id/button_more"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="10dp" />
             </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,9 +2,12 @@ package com.medikok.frontend.activity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -47,13 +50,8 @@ public class DrugDetailActivity extends AppCompatActivity {
         String imgurl = getIntent().getStringExtra("medicineImage");
 
         countView = findViewById(R.id.drug_count);
-        countView.setMaxLines(MAX_LINES_COLLAPSED);
+
         countView.setEllipsize(TextUtils.TruncateAt.END);
-
-        button = findViewById(R.id.button_more);
-
-        button.setBackgroundResource(R.drawable.arrow_down);
-        button.setOnClickListener(v -> toggleExpansion());
 
         // 데이터 설정
         nameView.setText(name);
@@ -76,6 +74,42 @@ public class DrugDetailActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        // 텍스트가 두 줄을 넘는지 확인 후 버튼 생성
+        countView.post(() -> {
+            if (countView.getLineCount() > MAX_LINES_COLLAPSED) {
+                createMoreButton();
+                Log.d("aaa", "줄의 개수" + countView.getLineCount());
+                Log.d("DrugDetailActivity", "버튼이 생성되었음");
+                countView.setMaxLines(MAX_LINES_COLLAPSED);
+            } else {
+                Log.d("aaa", "줄의 개수" + countView.getLineCount());
+                Log.d("DrugDetailActivity", "버튼이 생성되지 않음");
+            }
+        });
+    }
+
+    private void createMoreButton() {
+        button = new Button(this);
+        button.setBackgroundResource(R.drawable.arrow_down);
+        button.setOnClickListener(v -> toggleExpansion());
+
+        // 아이콘과 텍스트에 맞게 버튼의 너비를 설정합니다.
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        layoutParams.setMargins(0, 0, 16, 0); // 마진을 조절할 수 있습니다. 필요에 따라 조절하세요.
+        button.setLayoutParams(layoutParams);
+
+        // 레이아웃에 버튼 추가
+        LinearLayout buttonLayout = findViewById(R.id.drug_count_layout);
+        if (buttonLayout != null) {
+            buttonLayout.addView(button);
+        } else {
+            // Log an error or handle the case where the layout is not found
+            Log.e("DrugDetailActivity", "Layout with ID drug_count_layout not found");
         }
     }
 
