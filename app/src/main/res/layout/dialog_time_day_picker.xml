@@ -94,5 +94,16 @@
             android:layout_marginRight="10dp"
             android:text="일" />
     </LinearLayout>
-</LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:text="약 선택:" />
+    <Spinner
+        android:id="@+id/dropDownList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
+</LinearLayout>

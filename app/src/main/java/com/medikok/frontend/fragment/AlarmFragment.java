@@ -1,5 +1,6 @@
 package com.medikok.frontend.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,11 +18,14 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -36,14 +40,14 @@ import com.medikok.frontend.model.DrugInfo;
 import com.medikok.frontend.util.AddSchedule;
 import com.medikok.frontend.util.ServerConnector;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class AlarmFragment extends Fragment {
+    List<String> drugNameList = new ArrayList<>();
+
+    String selectedItem;
 
     private LinearLayout alarmContainer;
 
@@ -80,11 +84,10 @@ public class AlarmFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // 알람 표시 동적 구현
         View view = inflater.inflate(R.layout.fragment_alarm, container, false);
+
         alarmContainer = view.findViewById(R.id.alarmContainer);
         FloatingActionButton fab = view.findViewById(R.id.floatingActionButton);
         FloatingActionButton btn_test = view.findViewById(R.id.btn_test);
-
-        loadAlarmCards(); // 저장된 알람 카드를 불러옵니다.
 
         // 플로팅 버튼 클릭 이벤트 처리
         fab.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +124,11 @@ public class AlarmFragment extends Fragment {
 
                     CardView pillCard = makePillCard(getContext(), imageUrl, name, method, effect);
                     dynamicLayout.addView(pillCard);
+
+                    // 가져온 데이터를 drugNameList에 저장
+                    drugNameList.add(drugInfo.getItemName());
                 }
+
             }
 
             @Override
@@ -250,6 +257,29 @@ public class AlarmFragment extends Fragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_time_day_picker, null);
+
+        // 약 선택 드롭 다운 어댑터 설정
+        Spinner dropDownList = dialogView.findViewById(R.id.dropDownList);
+        ArrayAdapter<String> dropDownAdapter = new ArrayAdapter<>(
+                requireActivity(),
+                android.R.layout.simple_spinner_item,
+                drugNameList
+        );
+        dropDownAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dropDownList.setAdapter(dropDownAdapter);
+
+        dropDownList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedItem = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // 아무 항목도 선택되지 않았을 때의 동작 (필요 시 구현)
+            }
+        });
+
         builder.setView(dialogView);
 
         TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
@@ -272,8 +302,14 @@ public class AlarmFragment extends Fragment {
             LinearLayout newAlarmCard = (LinearLayout) inflater.inflate(R.layout.alarm, null);
 
             TextView alarmTime = newAlarmCard.findViewById(R.id.alarmPillDateTime);
+
+            // 알람 카드에 선택한 약 이름 설정
+            TextView alarmPillName = newAlarmCard.findViewById(R.id.alarmPillName);
+
             alarmTime.setText(String.format("%02d:%02d", hour, minute));
             alarmTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+
+            alarmPillName.setText(selectedItem);
 
             TextView[] dayTextViews = new TextView[] {
                     newAlarmCard.findViewById(R.id.alarmPillDateMon),
@@ -324,6 +360,29 @@ public class AlarmFragment extends Fragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_time_day_picker, null);
+
+        // 약 선택 드롭 다운 어댑터 설정
+        Spinner dropDownList = dialogView.findViewById(R.id.dropDownList);
+        ArrayAdapter<String> dropDownAdapter = new ArrayAdapter<>(
+                requireActivity(),
+                android.R.layout.simple_spinner_item,
+                drugNameList
+        );
+        dropDownAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dropDownList.setAdapter(dropDownAdapter);
+
+        dropDownList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedItem = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // 아무 항목도 선택되지 않았을 때의 동작 (필요 시 구현)
+            }
+        });
+
         builder.setView(dialogView);
 
         TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
@@ -339,6 +398,10 @@ public class AlarmFragment extends Fragment {
         };
 
         TextView alarmTime = alarmCard.findViewById(R.id.alarmPillDateTime);
+
+        // 알람 카드에 선택한 약 이름 설정
+        TextView alarmPillName = alarmCard.findViewById(R.id.alarmPillName);
+
         String[] timeParts = alarmTime.getText().toString().split(":");
         int currentHour = Integer.parseInt(timeParts[0]);
         int currentMinute = Integer.parseInt(timeParts[1]);
@@ -378,6 +441,7 @@ public class AlarmFragment extends Fragment {
             int minute = timePicker.getMinute();
 
             alarmTime.setText(String.format("%02d:%02d", hour, minute));
+            alarmPillName.setText(selectedItem);
 
             boolean allCheckedAfterEdit = true;
             for (CheckBox checkBox : dayCheckBoxes) {
