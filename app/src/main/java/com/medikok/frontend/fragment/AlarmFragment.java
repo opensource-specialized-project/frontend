@@ -112,6 +112,7 @@ public class AlarmFragment extends Fragment {
             public void onSuccess(List<DrugInfo> responseData) {
                 LinearLayout dynamicLayout = view.findViewById(R.id.layout1);
                 for (DrugInfo drugInfo : responseData) {
+
                     Log.d("AlarmFragment", "Item Name: " + drugInfo.getItemName());
                     Log.d("AlarmFragment", "Effects: " + drugInfo.getEfcyQesitm());
                     Log.d("AlarmFragment", "Use Method: " + drugInfo.getUseMethodQesitm());
