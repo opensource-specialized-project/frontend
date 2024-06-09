@@ -47,6 +47,8 @@ import java.util.Map;
 public class AlarmFragment extends Fragment {
     List<String> drugNameList = new ArrayList<>();
 
+    List<DrugInfo> drugInfoList = new ArrayList<>(); // 약에 대한 정보들과 정보 요청 메소드들이 담긴 리스트 선언
+
     String selectedItem;
 
     private LinearLayout alarmContainer;
@@ -81,7 +83,7 @@ public class AlarmFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         // 알람 표시 동적 구현
         View view = inflater.inflate(R.layout.fragment_alarm, container, false);
 
@@ -110,6 +112,10 @@ public class AlarmFragment extends Fragment {
         ServerConnector.connectToServer(new ServerConnector.ServerResponseListener() {
             @Override
             public void onSuccess(List<DrugInfo> responseData) {
+
+                // drugInfoList에 서버로부터 받은 데이터 저장
+                drugInfoList = responseData;
+
                 LinearLayout dynamicLayout = view.findViewById(R.id.layout1);
                 for (DrugInfo drugInfo : responseData) {
 
@@ -123,8 +129,8 @@ public class AlarmFragment extends Fragment {
                     String method = drugInfo.getUseMethodQesitm();
                     String imageUrl = drugInfo.getItemImage();
 
-                    CardView pillCard = makePillCard(getContext(), imageUrl, name, method, effect);
-                    dynamicLayout.addView(pillCard);
+//                    CardView pillCard = makePillCard(getContext(), imageUrl, name, method, effect);
+//                    dynamicLayout.addView(pillCard);
 
                     // 가져온 데이터를 drugNameList에 저장
                     drugNameList.add(drugInfo.getItemName());
@@ -142,6 +148,7 @@ public class AlarmFragment extends Fragment {
         return view;
     }
 
+    // 플로팅 버튼을 클릭 했을 경우
     private void showTimeDayPickerDialog() {
         Context context = getActivity();
 
@@ -184,6 +191,7 @@ public class AlarmFragment extends Fragment {
                 dialogView.findViewById(R.id.checkSunday)
         };
 
+        // 확인 버튼을 누를 경우
         builder.setPositiveButton("확인", (dialog, which) -> {
             int hour = timePicker.getHour();
             int minute = timePicker.getMinute();
@@ -237,6 +245,19 @@ public class AlarmFragment extends Fragment {
 
             addAlarmCardEventListeners(newAlarmCard);
             saveAlarmToPreferences(newAlarmCard);  // Save the new alarm to SharedPreferences
+
+            LinearLayout dynamicLayout = getView().findViewById(R.id.layout1);
+            for (DrugInfo drugInfo : drugInfoList) {
+                if (drugInfo.getItemName().equals(alarmPillName.getText().toString())) {
+                    String name = drugInfo.getItemName();
+                    String effect = drugInfo.getEfcyQesitm();
+                    String method = drugInfo.getUseMethodQesitm();
+                    String imageUrl = drugInfo.getItemImage();
+
+                    CardView pillCard = makePillCard(getContext(), imageUrl, name, method, effect);
+                    dynamicLayout.addView(pillCard);
+                }
+            }
         });
 
         builder.setNegativeButton("취소", null);
