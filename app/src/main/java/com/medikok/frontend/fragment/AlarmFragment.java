@@ -403,10 +403,9 @@ public class AlarmFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         alarmContainer.removeView(alarmCard);
 
-                        removeAlarmFromPreferences((LinearLayout) alarmCard); // LinearLayout로 캐스팅
-
                         TextView alarmDrugName = alarmCard.findViewById(R.id.alarmPillName);
                         String alarmDrugNameText = alarmDrugName.getText().toString();
+                        removeAlarmFromPreferences((LinearLayout) alarmCard); // LinearLayout로 캐스팅
 
                         // layout1에 추가된 카드뷰들을 반복문으로 순회
                         for (int i = 0; i < cardContainer.getChildCount(); i++) {
@@ -600,6 +599,8 @@ public class AlarmFragment extends Fragment {
 
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        alarmContainer.removeAllViews(); // 기존 알람을 모두 제거
+
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             String key = entry.getKey();
             if (key.endsWith("_name")) {
@@ -650,7 +651,6 @@ public class AlarmFragment extends Fragment {
             }
         }
     }
-
 
     private LinearLayout makePillCard(Context context, String imageUrl, String medicineName, String medicineCount, String medicineEffect) {
         // 카드 뷰 생성
