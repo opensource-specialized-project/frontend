@@ -40,6 +40,8 @@ import com.medikok.frontend.activity.DrugDetailActivity;
 import com.medikok.frontend.model.DrugInfo;
 import com.medikok.frontend.util.AddSchedule;
 import com.medikok.frontend.util.ServerConnector;
+import com.medikok.frontend.util.MakePillCard;
+import com.medikok.frontend.util.CardsFromPreferences;
 
 import org.w3c.dom.Text;
 
@@ -49,13 +51,11 @@ import java.util.Map;
 
 public class AlarmFragment extends Fragment {
     List<String> drugNameList = new ArrayList<>();
-
     List<DrugInfo> drugInfoList = new ArrayList<>(); // 약에 대한 정보들과 정보 요청 메소드들이 담긴 리스트 선언
-
     String selectedItem;
-
     private LinearLayout alarmContainer;
     private LinearLayout cardContainer;
+    private TextView noAlarmsTextView; // 추가된 TextView 참조
 
     public AlarmFragment() {
         // Required empty public constructor
@@ -93,6 +93,7 @@ public class AlarmFragment extends Fragment {
 
         alarmContainer = view.findViewById(R.id.alarmContainer);
         cardContainer = view.findViewById(R.id.layout1);
+        noAlarmsTextView = view.findViewById(R.id.noAlarmsTextView);
         FloatingActionButton fab = view.findViewById(R.id.floatingActionButton);
         FloatingActionButton btn_test = view.findViewById(R.id.btn_test);
 
@@ -133,7 +134,9 @@ public class AlarmFragment extends Fragment {
         });
 
         loadAlarmsFromPreferences();  // Load alarms from SharedPreferences when the fragment is created
-        loadCardsFromPreferences();
+        CardsFromPreferences.loadCardsFromPreferences(cardContainer, getContext());
+        updateNoAlarmsTextView();
+
 
         return view;
     }
@@ -235,6 +238,7 @@ public class AlarmFragment extends Fragment {
 
             addAlarmCardEventListeners(newAlarmCard);
             saveAlarmToPreferences(newAlarmCard);  // Save the new alarm to SharedPreferences
+            updateNoAlarmsTextView();
 
             // 서버의 약 정보 리스트에서 추가된 알람의 약 이름과 같은 객체를 찾아 카드 뷰 생성
             for (DrugInfo drugInfo : drugInfoList) {
@@ -244,10 +248,10 @@ public class AlarmFragment extends Fragment {
                     String method = drugInfo.getUseMethodQesitm();
                     String imageUrl = drugInfo.getItemImage();
 
-                    LinearLayout pillCard = makePillCard(getContext(), imageUrl, name, method, effect);
+                    LinearLayout pillCard = MakePillCard.makePillCard(getContext(), imageUrl, name, method, effect);
                     cardContainer.addView(pillCard);
 
-                    saveCardToPreferences(pillCard, alarmTime.toString());
+                    CardsFromPreferences.saveCardToPreferences(pillCard, alarmTime.toString(), getContext());
                 }
             }
         });
@@ -419,7 +423,8 @@ public class AlarmFragment extends Fragment {
                                     String drugNameText = drugName.getText().toString();
                                     if (drugNameText.equals(alarmDrugNameText)) {
                                         cardContainer.removeView(pillCard);
-                                        removeCardFromPreferences(pillCard);
+                                        CardsFromPreferences.removeCardFromPreferences(pillCard, getContext());
+                                        updateNoAlarmsTextView();
                                     }
                                 }
                             }
@@ -429,25 +434,6 @@ public class AlarmFragment extends Fragment {
                 })
                 .setNegativeButton("아니오", null)
                 .show();
-    }
-
-    private void saveCardToPreferences(LinearLayout pillCard, String alarmTime) {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("CardPreferences", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        TextView drugName = pillCard.findViewById(R.id.today_medicine_name);
-        TextView drugEffect = pillCard.findViewById(R.id.today_medicine_ef);
-        TextView drugCount = pillCard.findViewById(R.id.today_medicine_ct);
-        String imageUrl = pillCard.findViewById(R.id.imageView).getTag().toString();
-
-
-        String cardKey = alarmTime;
-        editor.putString(cardKey + "_drugName", drugName.getText().toString());
-        editor.putString(cardKey + "_drugEffect", drugEffect.getText().toString());
-        editor.putString(cardKey + "_drugCount", drugCount.getText().toString());
-        editor.putString(cardKey + "_imageUrl", imageUrl);
-
-        editor.apply();
     }
 
     private void saveAlarmToPreferences(LinearLayout alarmCard) {
@@ -479,33 +465,6 @@ public class AlarmFragment extends Fragment {
         editor.apply();
     }
 
-    private void removeCardFromPreferences(LinearLayout pillCard) {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("CardPreferences", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        TextView drugName = pillCard.findViewById(R.id.today_medicine_name);
-        TextView drugEffect = pillCard.findViewById(R.id.today_medicine_ef);
-        TextView drugCount = pillCard.findViewById(R.id.today_medicine_ct);
-        String imageUrl = pillCard.findViewById(R.id.imageView).getTag().toString();
-
-        // 알람 시간 키 가져오기
-        String alarmTime = null;
-        for (Map.Entry<String, ?> entry : sharedPreferences.getAll().entrySet()) {
-            if (entry.getKey().endsWith("_drugName")) {
-                alarmTime = entry.getKey().substring(0, entry.getKey().lastIndexOf("_drugName"));
-                break;
-            }
-        }
-
-        if (alarmTime != null) {
-            editor.remove(alarmTime + "_drugName");
-            editor.remove(alarmTime + "_drugEffect");
-            editor.remove(alarmTime + "_drugCount");
-            editor.remove(alarmTime + "_imageUrl");
-            editor.apply();
-        }
-    }
-
     private void removeAlarmFromPreferences(LinearLayout alarmCard) {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("AlarmPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -531,66 +490,6 @@ public class AlarmFragment extends Fragment {
         }
 
         editor.apply();
-    }
-
-    private void loadCardsFromPreferences() {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("CardPreferences", Context.MODE_PRIVATE);
-        Map<String, ?> allEntries = sharedPreferences.getAll();
-
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        cardContainer.removeAllViews();
-
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            String key = entry.getKey();
-            if (key.endsWith("_drugName")) {
-                String alarmTime = key.substring(0, key.lastIndexOf("_drugName"));
-                String drugName = (String) entry.getValue();
-                String drugEffect = sharedPreferences.getString(alarmTime + "_drugEffect", "");
-                String drugCount = sharedPreferences.getString(alarmTime + "_drugCount", "");
-                String imageUrl = sharedPreferences.getString(alarmTime + "_imageUrl", "");
-
-                LinearLayout newPillCard = (LinearLayout) inflater.inflate(R.layout.today_pill_card, null);
-
-                TextView Name = newPillCard.findViewById(R.id.today_medicine_name);
-                Name.setText(drugName);
-                Name.setMaxLines(1); // 한 줄만 표기되도록
-                Name.setEllipsize(TextUtils.TruncateAt.END); // 한 줄 넘어가면 ...으로 생략
-
-                TextView Effect = newPillCard.findViewById(R.id.today_medicine_ef);
-                Effect.setText(drugEffect);
-                Effect.setMaxLines(1);
-                Effect.setEllipsize(TextUtils.TruncateAt.END);
-
-                ImageView imageView = newPillCard.findViewById(R.id.imageView);
-                imageView.setTag(imageUrl);
-
-                if (imageUrl != null && !imageUrl.isEmpty()) {
-                    // 이미지가 있는 경우 Glide를 사용하여 이미지를 설정합니다.
-                    Glide.with(getContext())
-                            .load(imageUrl)
-                            .error(R.drawable.no_image) // 이미지 로드 중 오류가 발생할 경우 no_image 리소스를 표시합니다.
-                            .into(imageView);
-                }
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-                cardContainer.addView(newPillCard);
-
-                newPillCard.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        // Intent를 통해 상세페이지에 약의 정보들을 전달
-                        Intent intent = new Intent(getContext(), DrugDetailActivity.class);
-                        intent.putExtra("medicineName", drugName);
-                        intent.putExtra("medicineCount", drugCount);
-                        intent.putExtra("medicineEffect", drugEffect);
-                        intent.putExtra("medicineImage", imageUrl); // Example drawable resource ID
-                        getContext().startActivity(intent);
-                    }
-                });
-            }
-        }
     }
 
     private void loadAlarmsFromPreferences() {
@@ -652,56 +551,12 @@ public class AlarmFragment extends Fragment {
         }
     }
 
-    private LinearLayout makePillCard(Context context, String imageUrl, String medicineName, String medicineCount, String medicineEffect) {
-        // 카드 뷰 생성
-        LinearLayout pillCard = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.today_pill_card, null);
-
-        // 약의 이름 지정
-        TextView nameView = pillCard.findViewById(R.id.today_medicine_name);
-        nameView.setText(medicineName);
-        nameView.setMaxLines(1); // 한 줄만 표기되도록
-        nameView.setEllipsize(TextUtils.TruncateAt.END); // 한 줄 넘어가면 ...으로 생략
-
-        // 약의 효과 지정
-        TextView effectView = pillCard.findViewById(R.id.today_medicine_ef);
-        effectView.setText(medicineEffect);
-        effectView.setMaxLines(1);
-        effectView.setEllipsize(TextUtils.TruncateAt.END);
-
-        // 약의 복용법 지정
-        TextView countView = pillCard.findViewById(R.id.today_medicine_ct);
-        countView.setText(medicineCount);
-
-        // 카드 썸네일을 위한 이미지뷰 생성
-        ImageView imageView = pillCard.findViewById(R.id.imageView);
-        imageView.setTag(imageUrl);
-        Log.d("MainActivity", imageUrl);
-        // url 통해서 이미지 가져오기
-        // 이미지뷰에 이미지 설정
-        if (imageUrl != null && !imageUrl.isEmpty()) {
-            // 이미지가 있는 경우 Glide를 사용하여 이미지를 설정합니다.
-            Glide.with(context)
-                    .load(imageUrl)
-                    .error(R.drawable.no_image) // 이미지 로드 중 오류가 발생할 경우 no_image 리소스를 표시합니다.
-                    .into(imageView);
+    private void updateNoAlarmsTextView() {
+        if (alarmContainer.getChildCount() == 0) {
+            noAlarmsTextView.setVisibility(View.VISIBLE);
+        } else {
+            noAlarmsTextView.setVisibility(View.GONE);
         }
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-        // 상세 페이지로 넘어가기 위한 클릭 리스너 구현
-        pillCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // Intent를 통해 상세페이지에 약의 정보들을 전달
-                Intent intent = new Intent(context, DrugDetailActivity.class);
-                intent.putExtra("medicineName", medicineName);
-                intent.putExtra("medicineCount", medicineCount);
-                intent.putExtra("medicineEffect", medicineEffect);
-                intent.putExtra("medicineImage", imageUrl); // Example drawable resource ID
-                context.startActivity(intent);
-            }
-        });
-        return pillCard;
     }
 
 }

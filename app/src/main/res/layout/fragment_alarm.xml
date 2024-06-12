@@ -118,12 +118,31 @@
             android:contentDescription="scroll">
 
             <LinearLayout
-                android:id="@+id/alarmContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp"
-                tools:ignore="MissingConstraints"></LinearLayout>
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/noAlarmsTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="270dp"
+                    android:layout_gravity="center"
+                    android:text="알람이 존재하지 않습니다!\n추가해보세요!"
+                    android:textSize="30sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:gravity="center"
+                    android:visibility="gone"/>
+
+                <LinearLayout
+                    android:id="@+id/alarmContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    tools:ignore="MissingConstraints"></LinearLayout>
+
+            </LinearLayout>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
