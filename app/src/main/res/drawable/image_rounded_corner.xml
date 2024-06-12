@@ -1,0 +1,5 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="10dp" /> <!-- 원하는 반지름 설정 -->
+    <solid android:color="@android:color/white" /> <!-- 배경 색상 지정 -->
+</shape>

@@ -2,6 +2,7 @@ package com.medikok.frontend.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Outline;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -12,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
+import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -835,6 +838,7 @@ public class SearchFragment extends Fragment {
 
             // DrugInfo 객체의 정보를 화면에 설정
             String imageUrl = currentItem.getItemImage();
+
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 // 이미지가 있는 경우 Glide를 사용하여 이미지를 설정합니다.
                 Glide.with(getContext())
@@ -845,6 +849,7 @@ public class SearchFragment extends Fragment {
                 // 이미지가 없는 경우 drawable 리소스에서 no_image를 사용합니다.
                 pillImage.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.no_image));
             }
+            pillImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
             pillName.setText(currentItem.getItemName());
             pillSymptom.setText(currentItem.getEfcyQesitm());
 
